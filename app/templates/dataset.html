@@ -1,0 +1,159 @@
+{% extends 'layout.html' %}
+{% set active_page = "dashboard" %}
+{% block title %} Dataset Pesawat {% endblock %}
+
+{% block body %}
+<!-- PAGE CONTAINER-->
+
+<!-- MAIN CONTENT-->
+<div class="main-content">
+    <div class="section__content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="au-card recent-report">
+                        <div class="header-button float-right">
+                            <button class="btn btn-outline-primary btn-xs mb-3 mt-3 mr-1 ml-1" type="submit" data-toggle="modal" data-target="#importData"><i class="fa fa-upload"> Upload</i></button>
+                        </div>
+                        <div class="au-card-inner">
+                            <div class="table-responsive">
+                                <table id="tbl_dataset" class="table table-borderless table-striped table-earning">
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="copyright">
+                        <p>Copyright © 2018 Colorlib. All rights reserved. Template by <a href="https://colorlib.com">Colorlib</a>.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="importData">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="card">
+                <div class="card-header">
+                    <strong>Inline</strong> Form
+                </div>
+                <div class="card-body card-block">
+                    <form action="" method="post" class="form-inline">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group row">
+                                <input type="file" name="file" id="file" class="form-control dropify" data-height="100" required>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="card-footer">
+                    <button type="submit" class="btn btn-primary btn-sm">
+                        <i class="fa fa-dot-circle-o"></i> Submit
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END MAIN CONTENT-->
+<script>
+    $(document).ready(function(){
+
+        $('#tbl_dataset').DataTable({
+            ajax : {
+                'url' : "{{ url_for('getDataset') }}",
+            },
+            'columns': [
+                    {
+                        'title' : "ID",
+                        'data' : "id"
+                    },
+                    {
+                        'title' : "Nama",
+                        'data' : "nama_pesawat"
+                    },
+                    {
+                        'title' : "Jenis",
+                        'data' : "nama_jenis_pesawat"
+                    },
+                    {
+                        'title' : "Karakter",
+                        'data' : "nama_karakter_pesawat"
+                    },
+                    {
+                        'title' : "Jenis Sayap",
+                        'data' : "jenis_sayap"
+                    },
+                    {
+                        'title' : "Jenis Penempatan Sayap",
+                        'data' : "jenis_penempatan_sayap"
+                    },
+                    {
+                        'title' : "Jumlah Sayap",
+                        'data' : "jumlah_sayap"
+                    },
+                    {
+                        'title' : "Arah Sayap",
+                        'data' : "arah_sayap"
+                    },
+                    {
+                        'title' : "Jenis Mesin",
+                        'data' : "jenis_mesin"
+                    },
+                    {
+                        'title' : "Jumlah Mesin",
+                        'data' : "jumlah_mesin"
+                    },
+                    {
+                        'title' : "Posisi Mesin",
+                        'data' : "posisi_mesin"
+                    },
+                    {
+                        'title' : "Badan Pesawat",
+                        'data' : "badan_pesawat"
+                    },
+                    {
+                        'title' : "Jenis Ekor",
+                        'data' : "jenis_ekor"
+                    },
+                    {
+                        'title' : "Jenis Landing Gear",
+                        'data' : "jenis_landing_gear"
+                    },
+                    {
+                        'title' : "Persenjataan",
+                        'data' : "persenjataan"
+                    },
+                    {
+                        'title' : "Warna",
+                        'data' : "warna"
+                    },
+                    {
+                        'title' : "Karakteristik",
+                        'data' : "name_karakteristik"
+                    },
+                    {
+                        'title' : "Action",
+                        'data' : (data) => {
+                            let ret = "";
+                            ret += "<a class='btn btn-warning' href='#'>Edit</a>";
+                            ret += "    "
+                            ret += "<a class='btn btn-danger' href='#'>Delete</a>";
+                            return ret;
+                        }
+                    }
+                ]
+
+        });
+    });
+</script>
+<!-- END PAGE CONTAINER-->
+</div>
+{% endblock %}
+
+

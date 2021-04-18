@@ -1,0 +1,70 @@
+{% extends 'layout.html' %}
+{% set active_page = "dashboard" %}
+{% block title %} Karakter Pesawat {% endblock %}
+
+{% block body %}
+<!-- PAGE CONTAINER-->
+
+<!-- MAIN CONTENT-->
+<div class="main-content">
+<div class="section__content">
+<div class="container-fluid">
+<div class="row">
+    <div class="col-lg-12">
+        <div class="au-card recent-report">
+            <div class="au-card-inner">
+                <div class="table-responsive">
+                    <table id="tbl_karakter" class="table table-borderless table-striped table-earning">
+
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="copyright">
+            <p>Copyright © 2018 Colorlib. All rights reserved. Template by <a href="https://colorlib.com">Colorlib</a>.</p>
+        </div>
+    </div>
+</div>
+</div>
+</div>
+</div>
+<!-- END MAIN CONTENT-->
+<script>
+    $(document).ready(function(){
+
+        $('#tbl_karakter').DataTable({
+            ajax : {
+                'url' : "{{ url_for('getKarakter') }}",
+            },
+            'columns': [
+                    {
+                        'title' : "ID",
+                        'data' : "id"
+                    },{
+                        'title' : "Karakter",
+                        'data' : "name"
+                    },
+                    {
+                        'title' : "Action",
+                        'data' : (data) => {
+                            let ret = "";
+                            ret += "<a class='btn btn-warning' href='#'>Edit</a>";
+                            ret += "    "
+                            ret += "<a class='btn btn-danger' href='#'>Delete</a>";
+                            return ret;
+                        }
+                    }
+                ]
+
+        });
+    });
+</script>
+<!-- END PAGE CONTAINER-->
+</div>
+{% endblock %}
+
+
