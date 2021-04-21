@@ -1,6 +1,6 @@
 {% extends 'layout.html' %}
 {% set active_page = "dashboard" %}
-{% block title %} Dataset Pesawat {% endblock %}
+{% block title %} Dataset Process {% endblock %}
 
 {% block body %}
 <!-- PAGE CONTAINER-->
@@ -17,7 +17,7 @@
                         </div>
                         <div class="au-card-inner">
                             <div class="table-responsive">
-                                <table id="tbl_dataset" class="table table-borderless table-striped table-earning">
+                                <table id="tbl_process" class="table table-borderless table-striped table-earning">
 
                                 </table>
                             </div>
@@ -64,9 +64,9 @@
 <script>
     $(document).ready(function(){
 
-        $('#tbl_dataset').DataTable({
+        $('#tbl_process').DataTable({
             ajax : {
-                'url' : "{{ url_for('getDataset') }}",
+                'url' : "{{ url_for('getProcessData') }}",
             },
             'columns': [
                     {
@@ -109,16 +109,6 @@
                         'title' : "Warna",
                         'data' : "warna"
                     },
-                    {
-                        'title' : "Action",
-                        'data' : (data) => {
-                            let ret = "";
-                            ret += "<a class='btn btn-warning' href='#'>Edit</a>";
-                            ret += "    "
-                            ret += "<a class='btn btn-danger' href='#'>Delete</a>";
-                            return ret;
-                        }
-                    }
                 ]
 
         });

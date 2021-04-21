@@ -1,3 +1,8 @@
+import csv
+import os
+
+from werkzeug.utils import secure_filename
+
 from app import app
 from flask import render_template, request, redirect, url_for, flash, jsonify, session
 from flaskext.mysql import MySQL
@@ -113,30 +118,6 @@ def getJenis():
     return jsonify(data)
 
 # ================================================
-#route untuk halaman karakter pesawat
-@app.route('/karakter')
-def karakter():
-    return render_template('karakter.html')
-
-#fungsi untuk ambil data karakter pesawat
-@app.route('/getKarakter')
-def getKarakter():
-    conn = mysql.connect()
-    cursor = conn.cursor()
-    sql = "SELECT * FROM tbl_karakter_pesawat"
-    cursor.execute(sql)
-    result = cursor.fetchall()
-    conn.close()
-
-    res = []
-    for row in result:
-        res.append({"id" : row[0], "name" : row[1]})
-
-    data = {}
-    data["data"] = res
-    return jsonify(data)
-
-# ================================================
 #route untuk halaman karakteristik pesawat
 @app.route('/karakteristik')
 def karakteristik():
@@ -195,17 +176,107 @@ def dataset():
 def getDataset():
     conn = mysql.connect()
     cursor = conn.cursor()
-    sql = "SELECT p.id, nama_pesawat, j.nama_jenis_pesawat, k.nama_karakter_pesawat, a.spesifik as jenis_sayap, b.spesifik as jenis_penempatan_sayap, c.spesifik as jumlah_sayap, d.spesifik as arah_sayap, e.spesifik as jenis_mesin, f.spesifik as jumlah_mesin, g.spesifik as posisi_mesin, h.spesifik as badan_pesawat, i.spesifik as jenis_ekor, l.spesifik as jenis_landing_gear, m.spesifik as persenjataan, n.spesifik as warna, r.name FROM tbl_pesawat as p INNER JOIN tbl_jenis_pesawat as j ON p.id_jenis_pesawat=j.id_jenis_pesawat INNER JOIN tbl_karakter_pesawat as k ON k.id_karakter_pesawat=p.id_karakter_pesawat INNER JOIN tbl_spesifik as a ON a.id_spesifik=p.id_jenis_sayap INNER JOIN tbl_spesifik as b ON b.id_spesifik=p.id_jenis_penempatan_sayap INNER JOIN tbl_spesifik as c ON c.id_spesifik=p.id_jumlah_sayap INNER JOIN tbl_spesifik as d ON d.id_spesifik=p.id_arah_sayap INNER JOIN tbl_spesifik as e ON e.id_spesifik=p.id_jenis_mesin INNER JOIN tbl_spesifik as f ON f.id_spesifik=p.id_jumlah_mesin INNER JOIN tbl_spesifik as g ON g.id_spesifik=p.id_posisi_mesin INNER JOIN tbl_spesifik as h ON h.id_spesifik=p.id_badan_pesawat INNER JOIN tbl_spesifik as i ON i.id_spesifik=p.id_jenis_ekor INNER JOIN tbl_spesifik as l ON l.id_spesifik=p.id_jenis_landing_gear INNER JOIN tbl_spesifik as m ON m.id_spesifik=p.id_persenjataan INNER JOIN tbl_spesifik as n ON n.id_spesifik=p.id_warna INNER JOIN tbl_karakteristik as r ON r.id=a.id_karakteristik"
+    sql = "SELECT p.id, nama_pesawat, j.nama_jenis_pesawat, a.spesifik as jenis_sayap, b.spesifik as jenis_penempatan_sayap, d.spesifik as arah_sayap, e.spesifik as jenis_mesin, h.spesifik as badan_pesawat, m.spesifik as persenjataan, n.spesifik as warna, r.name FROM tbl_pesawat as p INNER JOIN tbl_jenis_pesawat as j ON p.id_jenis_pesawat=j.id_jenis_pesawat INNER JOIN tbl_spesifik as a ON a.id_spesifik=p.id_jenis_sayap INNER JOIN tbl_spesifik as b ON b.id_spesifik=p.id_jenis_penempatan_sayap INNER JOIN tbl_spesifik as d ON d.id_spesifik=p.id_arah_sayap INNER JOIN tbl_spesifik as e ON e.id_spesifik=p.id_jenis_mesin INNER JOIN tbl_spesifik as h ON h.id_spesifik=p.id_badan_pesawat INNER JOIN tbl_spesifik as m ON m.id_spesifik=p.id_persenjataan INNER JOIN tbl_spesifik as n ON n.id_spesifik=p.id_warna INNER JOIN tbl_karakteristik as r ON r.id=a.id_karakteristik"
     cursor.execute(sql)
     result = cursor.fetchall()
     conn.close()
 
     res = []
     for row in result:
-        res.append({"id" : row[0], "nama_pesawat" : row[1], "nama_jenis_pesawat" : row[2], "nama_karakter_pesawat" : row[3],
-                    "jenis_sayap" : row[4], "jenis_penempatan_sayap" : row[5], "jumlah_sayap" : row[6], "arah_sayap" : row[7],
-                    "jenis_mesin" : row[8], "jumlah_mesin" : row[9], "posisi_mesin" : row[10], "badan_pesawat" : row[11],
-                    "jenis_ekor" : row[12], "jenis_landing_gear" : row[13], "persenjataan" : row[14], "warna" : row[15], "name_karakteristik" : row[16],})
+        res.append({"id" : row[0], "nama_pesawat" : row[1], "nama_jenis_pesawat" : row[2],
+                    "jenis_sayap" : row[3], "jenis_penempatan_sayap" : row[4], "arah_sayap" : row[5],
+                    "jenis_mesin" : row[6], "badan_pesawat" : row[7],
+                    "persenjataan" : row[8], "warna" : row[9]})
+
+    data = {}
+    data["data"] = res
+    return jsonify(data)
+
+# ================================================
+#permission file upload
+ALLOWED_EXTENSION=set(['csv','json','xml'])
+app.config['UPLOAD_FOLDER'] = 'app/uploads'
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.',1)[1].lower() in ALLOWED_EXTENSION
+
+# ================================================
+# fungsi untuk import dataset
+@app.route('/importData', methods=['GET','POST'])
+def importData():
+    if request.method == 'POST':
+        file = request.files['file']
+
+    if 'file' not in request.files:
+        return redirect(request.url)
+
+    if file.filename == '':
+        return redirect(request.url)
+
+    if file and allowed_file(file.filename):
+        ext = str(file.filename)
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+        conn = mysql.connect()
+        cursor = conn.cursor()
+        data = []
+        if ext.rsplit('.', 1)[1] == 'csv':
+            csv_data = csv.reader(open(os.path.join(app.config['UPLOAD_FOLDER'], filename)))
+            csv_data = iter(csv_data)
+            next(csv_data, None)
+            for row in csv_data:
+                print(row)
+                t = str(row).strip('[]').strip("'")
+                b = t.rsplit(";")
+                res = []
+                count = len(b)
+                print(count)
+                for line in b:
+                    cek = "SELECT id_spesifik FROM tbl_spesifik WHERE spesifik=%s"
+                    text = (line)
+                    cursor.execute(cek, text)
+                    id_spesifik = cursor.fetchone()
+                    if id_spesifik == None:
+                        cek = "SELECT id_jenis_pesawat FROM tbl_jenis_pesawat WHERE nama_jenis_pesawat=%s"
+                        text = (line)
+                        cursor.execute(cek, text)
+                        id_spesifik = cursor.fetchone()
+                    id_spesifik = str(id_spesifik).replace("(", "").replace(")", "").replace(",", "")
+                    count-=1
+                    if count == 0:
+                        res.append(line)
+                    else:
+                        res.append(id_spesifik)
+                data.append(res)
+            for row in data:
+                sql = "INSERT INTO tbl_pesawat (nama_pesawat, id_jenis_pesawat, id_jenis_sayap, id_jenis_penempatan_sayap, id_arah_sayap, id_jenis_mesin, id_badan_pesawat, id_persenjataan, id_warna) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"
+                t = (row[9], row[8], row[1], row[2], row[3], row[6], row[4], row[5], row[7])
+                cursor.execute(sql, t)
+        conn.commit()
+        cursor.close()
+    return redirect(url_for('dataset'))
+
+# ================================================
+#proses perhitungan fusi normalisasi dan naivebayes
+@app.route('/processData')
+def processData():
+    return render_template('process.html')
+
+@app.route('/getpPocessData')
+def getProcessData():
+    conn = mysql.connect()
+    cursor = conn.cursor()
+    sql = "SELECT p.id, nama_pesawat, j.nama_jenis_pesawat, a.bit_spesifik as jenis_sayap, b.bit_spesifik as jenis_penempatan_sayap, d.bit_spesifik as arah_sayap, e.bit_spesifik as jenis_mesin, h.bit_spesifik as badan_pesawat, m.bit_spesifik as persenjataan, n.bit_spesifik as warna, r.name FROM tbl_pesawat as p INNER JOIN tbl_jenis_pesawat as j ON p.id_jenis_pesawat=j.id_jenis_pesawat INNER JOIN tbl_spesifik as a ON a.id_spesifik=p.id_jenis_sayap INNER JOIN tbl_spesifik as b ON b.id_spesifik=p.id_jenis_penempatan_sayap INNER JOIN tbl_spesifik as d ON d.id_spesifik=p.id_arah_sayap INNER JOIN tbl_spesifik as e ON e.id_spesifik=p.id_jenis_mesin INNER JOIN tbl_spesifik as h ON h.id_spesifik=p.id_badan_pesawat INNER JOIN tbl_spesifik as m ON m.id_spesifik=p.id_persenjataan INNER JOIN tbl_spesifik as n ON n.id_spesifik=p.id_warna INNER JOIN tbl_karakteristik as r ON r.id=a.id_karakteristik"
+    cursor.execute(sql)
+    result = cursor.fetchall()
+    conn.close()
+
+    res = []
+    for row in result:
+        res.append({"id": row[0], "nama_pesawat": row[1], "nama_jenis_pesawat": row[2],
+                    "jenis_sayap": row[3], "jenis_penempatan_sayap": row[4], "arah_sayap": row[5],
+                    "jenis_mesin": row[6], "badan_pesawat": row[7],
+                    "persenjataan": row[8], "warna": row[9]})
 
     data = {}
     data["data"] = res
