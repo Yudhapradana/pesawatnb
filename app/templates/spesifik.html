@@ -7,36 +7,173 @@
 
 <!-- MAIN CONTENT-->
 <div class="main-content">
-<div class="section__content">
-<div class="container-fluid">
-<div class="row">
-    <div class="col-lg-12">
-        <div class="au-card recent-report">
-            <div class="au-card-inner">
-                <div class="table-responsive">
-                    <table id="tbl_spesifik" class="table table-borderless table-striped table-earning">
+    <div class="section__content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="au-card recent-report">
+                        <div class="header-button float-right">
+                            <a href="javascript:void(0);" class="btn btn-success mb-3 mt-3 mr-1 ml-1" data-toggle="modal" data-target="#insertModal"><span class="fa fa-plus"> Tambah Data</span></a>
+                        </div>
+                        <div class="au-card-inner">
+                            <div class="table-responsive">
+                                <table id="tbl_spesifik" class="table table-borderless table-striped table-earning" style="width:100%">
 
-                    </table>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="copyright">
+                        <p>Copyright © 2018 Colorlib. All rights reserved. Template by <a href="https://colorlib.com">Colorlib</a>.
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<div class="row">
-    <div class="col-md-12">
-        <div class="copyright">
-            <p>Copyright © 2018 Colorlib. All rights reserved. Template by <a href="https://colorlib.com">Colorlib</a>.</p>
+<div class="modal fade" id="insertModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="card">
+                <div class="card-header">
+                    <strong>Tambah Data</strong>
+                </div>
+                <div class="card-body card-block">
+                    <form action="{{ url_for('insertSpesifik') }}" id="insert" method="POST">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <label for="karakteristik" class="pr-1  form-control-label">Karakteristik</label>
+                                <select name="karakteristik" id="karakteristik" class="form-control">
+                                    <option value="0" hidden>Pilih Karakteristik</option>
+                                    {% for row in karakteristik %}
+                                    <option value="{{ row.0 }}">{{ row.1 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <label for="kode_spesifik" class="pr-1  form-control-label">Kode Spesifik</label>
+                                <input class="form-control" type="text" id="kode_spesifik" name="kode_spesifik" placeholder="Kode Spesifik" required>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <label for="spesifik" class="pr-1  form-control-label">Spesifik</label>
+                                <input class="form-control" type="text" id="spesifik" name="spesifik" placeholder="Spesifik" required>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <label for="bit_spesifik" class="pr-1  form-control-label">Bit Spesifik</label>
+                                <input class="form-control" type="number" id="bit_spesifik" name="bit_spesifik" placeholder="Bit Spesifik" required>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary btn-sm">
+                                <i class="fa fa-dot-circle-o"></i> Submit
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+<div class="modal fade" id="updateModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="card">
+                <div class="card-header">
+                    <strong>Update Data</strong>
+                </div>
+                <div class="card-body card-block">
+                    <form action="{{ url_for('updateSpesifik') }}" id="update" method="POST">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <label for="ukarakteristik" class="pr-1  form-control-label">Karakteristik</label>
+                                <select name="ukarakteristik" id="ukarakteristik" class="form-control">
+                                    <option value="" hidden>Pilih Karakteristik</option>
+                                    {% for row in karakteristik %}
+                                        <option value="{{ row.0 }}">{{ row.1 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <label for="ukode_spesifik" class="pr-1  form-control-label">Kode Spesifik</label>
+                                <input class="form-control" type="text" id="ukode_spesifik" name="ukode_spesifik" placeholder="Kode Spesifik" required>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <label for="uspesifik" class="pr-1  form-control-label">Spesifik</label>
+                                <input class="form-control" type="text" id="uspesifik" name="uspesifik" placeholder="Spesifik" required>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <label for="ubit_spesifik" class="pr-1  form-control-label">Bit Spesifik</label>
+                                <input class="form-control" type="number" id="ubit_spesifik" name="ubit_spesifik" placeholder="Bit Spesifik" required>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <input id="uid" name="uid" hidden>
+                            <button type="submit" class="btn btn-primary btn-sm">
+                                <i class="fa fa-dot-circle-o"></i> Submit
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-</div>
+<div class="modal fade" id="deleteModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="card">
+                <div class="card-header">
+                    <strong>Delete Data</strong>
+                </div>
+                <div class="card-body card-block">
+                    <form action="{{ url_for('deleteSpesifik') }}" id="delete" method="POST">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <font>Anda ingin menghapus <b><font id="dspesifik"></font></b> ?</font>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <input id="did" name="did" hidden>
+                            <button type="submit" class="btn btn-primary btn-sm">
+                                <i class="fa fa-dot-circle-o"></i> Delete
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <!-- END MAIN CONTENT-->
 <script>
     $(document).ready(function(){
 
         $('#tbl_spesifik').DataTable({
+            scrollY:        "800px",
+            scrollX:        true,
+            scrollCollapse: true,
+            paging:         true,
+            fixedColumns:   {
+                leftColumns: 1,
+                rightColumns: 1
+            },
             ajax : {
                 'url' : "{{ url_for('getSpesifik') }}",
             },
@@ -65,16 +202,43 @@
                         'title' : "Action",
                         'data' : (data) => {
                             let ret = "";
-                            ret += "<a class='btn btn-warning' href='#'>Edit</a>";
+                            ret += "<a class='btn btn-warning item_edit' href='javascript:void(0);' data-id='"+data.id+"' data-id_karakteristik='"+data.id_karakteristik+"' data-kode='"+data.kode_spesifik+"' data-spesifik='"+data.spesifik+"' data-bit='"+data.bit_spesifik+"'>Edit</a>";
                             ret += "    "
-                            ret += "<a class='btn btn-danger' href='#'>Delete</a>";
+                            ret += "<a class='btn btn-danger item_delete' href='javascript:void(0);' data-id='"+data.id+"' data-id_karakteristik='"+data.id_karakteristik+"' data-kode='"+data.kode_spesifik+"' data-spesifik='"+data.spesifik+"' data-bit='"+data.bit_spesifik+"'>Delete</a>";
                             return ret;
                         }
                     }
-                ]
+                ],
+        });
 
+        $('#tbl_spesifik').on('click','.item_edit',function(){
+            var upid            = $(this).data('id');
+            var id_karakteristik= $(this).data('id_karakteristik');
+            var kode            = $(this).data('kode');
+            var spesifik        = $(this).data('spesifik');
+            var bit             = $(this).data('bit');
+
+            $('[name="uid"]').val(upid);
+            $('[name="ukarakteristik"]').val(id_karakteristik);
+            $('[name="ukode_spesifik"]').val(kode);
+            $('[name="uspesifik"]').val(spesifik);
+            $('[name="ubit_spesifik"]').val(bit);
+
+            $('#updateModal').modal('show');
+        });
+
+
+        $('#tbl_spesifik').on('click','.item_delete',function(){
+            var id = $(this).data('id');
+            var nama = $(this).data('spesifik');
+
+            $('#deleteModal').modal('show');
+            document.getElementById("dspesifik").innerHTML=nama;
+            $('[name="did"]').val(id);
         });
     });
+
+
 </script>
 <!-- END PAGE CONTAINER-->
 </div>

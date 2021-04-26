@@ -14,6 +14,7 @@
                     <div class="au-card recent-report">
                         <div class="header-button float-right">
                             <button class="btn btn-outline-primary btn-xs mb-3 mt-3 mr-1 ml-1" type="submit" data-toggle="modal" data-target="#importData"><i class="fa fa-upload"> Upload</i></button>
+                            <a href="javascript:void(0);" class="btn btn-success mb-3 mt-3 mr-1 ml-1" data-toggle="modal" data-target="#insertModal"><span class="fa fa-plus"> Tambah Data</span></a>
                         </div>
                         <div class="au-card-inner">
                             <div class="table-responsive">
@@ -40,7 +41,7 @@
         <div class="modal-content">
             <div class="card">
                 <div class="card-header">
-                    <strong>Inline</strong> Form
+                    <strong>Import Dataset</strong>
                 </div>
                 <div class="card-body card-block">
                     <form action="{{ url_for('importData') }}" method="POST" enctype="multipart/form-data">
@@ -60,11 +61,318 @@
         </div>
     </div>
 </div>
+<div class="modal fade" id="insertModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="card">
+                <div class="card-header">
+                    <strong>Tambah Data</strong>
+                </div>
+                <div class="card-body card-block">
+                    <form action="{{ url_for('insertDataset') }}" id="insert" method="POST">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <label for="nama_pesawat" class="pr-1  form-control-label">Nama Pesawat</label>
+                                <input class="form-control" type="text" id="nama_pesawat" name="nama_pesawat" placeholder="Nama Pesawat" required>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <label for="jenis_pesawat" class="pr-1  form-control-label">Jenis Pesawat</label>
+                                <select name="jenis_pesawat" id="jenis_pesawat" class="form-control">
+                                    <option value="0" hidden>Pilih Jenis Pesawat</option>
+                                    {% for row in jenis %}
+                                        <option value="{{ row.0 }}">{{ row.1 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <label for="jenis_sayap" class="pr-1  form-control-label">Jenis Sayap</label>
+                                <select name="jenis_sayap" id="jenis_sayap" class="form-control">
+                                    <option value="0" hidden>Pilih Jenis Sayap</option>
+                                    {% for row in js %}
+                                        <option value="{{ row.0 }}">{{ row.3 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <label for="jenis_penempatan_sayap" class="pr-1  form-control-label">Penempatan Sayap</label>
+                                <select name="jenis_penempatan_sayap" id="jenis_penempatan_sayap" class="form-control">
+                                    <option value="0" hidden>Pilih Jenis Penempatan Sayap</option>
+                                    {% for row in jp %}
+                                        <option value="{{ row.0 }}">{{ row.3 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <label for="arah_sayap" class="pr-1  form-control-label">Arah Sayap</label>
+                                <select name="arah_sayap" id="arah_sayap" class="form-control">
+                                    <option value="0" hidden>Pilih Arah Sayap</option>
+                                    {% for row in rs %}
+                                        <option value="{{ row.0 }}">{{ row.3 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <label for="jenis_mesin" class="pr-1  form-control-label">Jenis Mesin</label>
+                                <select name="jenis_mesin" id="jenis_mesin" class="form-control">
+                                    <option value="0" hidden>Pilih Jenis Mesin</option>
+                                    {% for row in jm %}
+                                        <option value="{{ row.0 }}">{{ row.3 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <label for="badan_pesawat" class="pr-1  form-control-label">Badan Pesawat</label>
+                                <select name="badan_pesawat" id="badan_pesawat" class="form-control">
+                                    <option value="0" hidden>Pilih Badan Pesawat</option>
+                                    {% for row in bp %}
+                                        <option value="{{ row.0 }}">{{ row.3 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <label for="persenjataan" class="pr-1  form-control-label">Persenjataan</label>
+                                <select name="persenjataan" id="persenjataan" class="form-control">
+                                    <option value="0" hidden>Pilih Persenjataan</option>
+                                    {% for row in ps %}
+                                        <option value="{{ row.0 }}">{{ row.3 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <label for="warna" class="pr-1  form-control-label">Warna</label>
+                                <select name="warna" id="warna" class="form-control">
+                                    <option value="0" hidden>Pilih Warna</option>
+                                    {% for row in wn %}
+                                        <option value="{{ row.0 }}">{{ row.3 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <label for="posisi_mesin" class="pr-1  form-control-label">Posisi Mesin</label>
+                                <select name="posisi_mesin" id="posisi_mesin" class="form-control">
+                                    <option value="0" hidden>Pilih Posisi Mesin</option>
+                                    {% for row in pm %}
+                                        <option value="{{ row.0 }}">{{ row.3 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <label for="jenis_ekor" class="pr-1  form-control-label">Jenis Ekor</label>
+                                <select name="jenis_ekor" id="jenis_ekor" class="form-control">
+                                    <option value="0" hidden>Pilih Jenis Ekor</option>
+                                    {% for row in je %}
+                                        <option value="{{ row.0 }}">{{ row.3 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary btn-sm">
+                                <i class="fa fa-dot-circle-o"></i> Submit
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="updateModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="card">
+                <div class="card-header">
+                    <strong>Update Data</strong>
+                </div>
+                <div class="card-body card-block">
+                    <form action="{{ url_for('updateDataset') }}" id="update" method="POST">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <label for="unama_pesawat" class="pr-1  form-control-label">Nama Pesawat</label>
+                                <input class="form-control" type="text" id="unama_pesawat" name="unama_pesawat" placeholder="Nama Pesawat" required>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <label for="ujenis_pesawat" class="pr-1  form-control-label">Jenis Pesawat</label>
+                                <select name="ujenis_pesawat" id="ujenis_pesawat" class="form-control">
+                                    <option value="0" hidden>Pilih Jenis Pesawat</option>
+                                    {% for row in jenis %}
+                                        <option value="{{ row.0 }}">{{ row.1 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <label for="ujenis_sayap" class="pr-1  form-control-label">Jenis Sayap</label>
+                                <select name="ujenis_sayap" id="ujenis_sayap" class="form-control">
+                                    <option value="0" hidden>Pilih Jenis Sayap</option>
+                                    {% for row in js %}
+                                        <option value="{{ row.0 }}">{{ row.3 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <label for="ujenis_penempatan_sayap" class="pr-1  form-control-label">Penempatan Sayap</label>
+                                <select name="ujenis_penempatan_sayap" id="ujenis_penempatan_sayap" class="form-control">
+                                    <option value="0" hidden>Pilih Jenis Penempatan Sayap</option>
+                                    {% for row in jp %}
+                                        <option value="{{ row.0 }}">{{ row.3 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <label for="uarah_sayap" class="pr-1  form-control-label">Arah Sayap</label>
+                                <select name="uarah_sayap" id="uarah_sayap" class="form-control">
+                                    <option value="0" hidden>Pilih Arah Sayap</option>
+                                    {% for row in rs %}
+                                        <option value="{{ row.0 }}">{{ row.3 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <label for="ujenis_mesin" class="pr-1  form-control-label">Jenis Mesin</label>
+                                <select name="ujenis_mesin" id="ujenis_mesin" class="form-control">
+                                    <option value="0" hidden>Pilih Jenis Mesin</option>
+                                    {% for row in jm %}
+                                        <option value="{{ row.0 }}">{{ row.3 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <label for="ubadan_pesawat" class="pr-1  form-control-label">Badan Pesawat</label>
+                                <select name="ubadan_pesawat" id="ubadan_pesawat" class="form-control">
+                                    <option value="0" hidden>Pilih Badan Pesawat</option>
+                                    {% for row in bp %}
+                                        <option value="{{ row.0 }}">{{ row.3 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <label for="upersenjataan" class="pr-1  form-control-label">Persenjataan</label>
+                                <select name="upersenjataan" id="upersenjataan" class="form-control">
+                                    <option value="0" hidden>Pilih Persenjataan</option>
+                                    {% for row in ps %}
+                                        <option value="{{ row.0 }}">{{ row.3 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <label for="uwarna" class="pr-1  form-control-label">Warna</label>
+                                <select name="uwarna" id="uwarna" class="form-control">
+                                    <option value="0" hidden>Pilih Warna</option>
+                                    {% for row in wn %}
+                                        <option value="{{ row.0 }}">{{ row.3 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <label for="uposisi_mesin" class="pr-1  form-control-label">Posisi Mesin</label>
+                                <select name="uposisi_mesin" id="uposisi_mesin" class="form-control">
+                                    <option value="0" hidden>Pilih Posisi Mesin</option>
+                                    {% for row in pm %}
+                                        <option value="{{ row.0 }}">{{ row.3 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <label for="ujenis_ekor" class="pr-1  form-control-label">Jenis Ekor</label>
+                                <select name="ujenis_ekor" id="ujenis_ekor" class="form-control">
+                                    <option value="0" hidden>Pilih Jenis Ekor</option>
+                                    {% for row in je %}
+                                        <option value="{{ row.0 }}">{{ row.3 }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <input id="uid" name="uid" hidden>
+                            <button type="submit" class="btn btn-primary btn-sm">
+                                <i class="fa fa-dot-circle-o"></i> Submit
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="deleteModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="card">
+                <div class="card-header">
+                    <strong>Delete Data</strong>
+                </div>
+                <div class="card-body card-block">
+                    <form action="{{ url_for('deleteDataset') }}" id="delete" method="POST">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <font>Anda ingin menghapus data Pesawat <b><font id="dnama"></font></b> berjenis <b><font id="djenis"></font></b> ?</font>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <input id="did" name="did" hidden>
+                            <button type="submit" class="btn btn-primary btn-sm">
+                                <i class="fa fa-dot-circle-o"></i> Delete
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- END MAIN CONTENT-->
 <script>
     $(document).ready(function(){
 
         $('#tbl_dataset').DataTable({
+            scrollY:        "800px",
+            scrollX:        true,
+            scrollCollapse: true,
+            paging:         true,
+            fixedColumns:   {
+                leftColumns: 1,
+                rightColumns: 1
+            },
             ajax : {
                 'url' : "{{ url_for('getDataset') }}",
             },
@@ -110,17 +418,67 @@
                         'data' : "warna"
                     },
                     {
+                        'title' : "Posisi Mesin",
+                        'data' : "posisi_mesin"
+                    },
+                    {
+                        'title' : "Jenis Ekor",
+                        'data' : "jenis_ekor"
+                    },
+                    {
                         'title' : "Action",
                         'data' : (data) => {
                             let ret = "";
-                            ret += "<a class='btn btn-warning' href='#'>Edit</a>";
+                            ret += "<a class='btn btn-warning item_edit' href='javascript:void(0);' data-id='"+data.id+"' data-nama='"+data.nama_pesawat+"' data-id_jenis_pesawat='"+data.id_jenis_pesawat+"' data-id_jenis_sayap='"+data.id_jenis_sayap+"' data-id_penempatan_sayap='"+data.id_penempatan_sayap+"' data-id_arah_sayap='"+data.id_arah_sayap+"' data-id_jenis_mesin='"+data.id_jenis_mesin+"' data-id_badan_pesawat='"+data.id_badan_pesawat+"' data-id_persenjataan='"+data.id_persenjataan+"' data-id_warna='"+data.id_warna+"' data-id_posisi_mesin='"+data.id_posisi_mesin+"' data-id_jenis_ekor='"+data.id_jenis_ekor+"'>Edit</a>";
                             ret += "    "
-                            ret += "<a class='btn btn-danger' href='#'>Delete</a>";
+                            ret += "<a class='btn btn-danger item_delete' href='javascript:void(0);' data-id='"+data.id+"' data-nama='"+data.nama_pesawat+"' data-nama_jenis_pesawat='"+data.nama_jenis_pesawat+"' data-id_jenis_sayap='"+data.id_jenis_sayap+"' data-id_penempatan_sayap='"+data.id_penempatan_sayap+"' data-id_arah_sayap='"+data.id_arah_sayap+"' data-id_jenis_mesin='"+data.id_jenis_mesin+"' data-id_badan_pesawat='"+data.id_badan_pesawat+"' data-id_persenjataan='"+data.id_persenjataan+"' data-id_warna='"+data.id_warna+"' data-id_posisi_mesin='"+data.id_posisi_mesin+"' data-id_jenis_ekor='"+data.id_jenis_ekor+"'>Delete</a>";
                             return ret;
                         }
                     }
                 ]
 
+        });
+
+        $('#tbl_dataset').on('click','.item_edit',function(){
+            var upid          = $(this).data('id');
+            var nama          = $(this).data('nama');
+            var jenis         = $(this).data('id_jenis_pesawat');
+            var js            = $(this).data('id_jenis_sayap');
+            var jp            = $(this).data('id_penempatan_sayap');
+            var as            = $(this).data('id_arah_sayap');
+            var jm            = $(this).data('id_jenis_mesin');
+            var bp            = $(this).data('id_badan_pesawat');
+            var ps            = $(this).data('id_persenjataan');
+            var wn            = $(this).data('id_warna');
+            var pm            = $(this).data('id_posisi_mesin');
+            var je            = $(this).data('id_jenis_ekor');
+
+            $('[name="uid"]').val(upid);
+            $('[name="unama_pesawat"]').val(nama);
+            $('[name="ujenis_pesawat"]').val(jenis);
+            $('[name="ujenis_sayap"]').val(js);
+            $('[name="ujenis_penempatan_sayap"]').val(jp);
+            $('[name="uarah_sayap"]').val(as);
+            $('[name="ujenis_mesin"]').val(jm);
+            $('[name="ubadan_pesawat"]').val(bp);
+            $('[name="upersenjataan"]').val(ps);
+            $('[name="uwarna"]').val(wn);
+            $('[name="uposisi_mesin"]').val(pm);
+            $('[name="ujenis_ekor"]').val(je);
+
+            $('#updateModal').modal('show');
+        });
+
+
+        $('#tbl_dataset').on('click','.item_delete',function(){
+            var id = $(this).data('id');
+            var nama = $(this).data('nama');
+            var jenis = $(this).data('nama_jenis_pesawat');
+
+            $('#deleteModal').modal('show');
+            document.getElementById("dnama").innerHTML=nama;
+            document.getElementById("djenis").innerHTML=jenis;
+            $('[name="did"]').val(id);
         });
     });
 </script>

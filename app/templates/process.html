@@ -12,9 +12,6 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="au-card recent-report">
-                        <div class="header-button float-right">
-                            <button class="btn btn-outline-primary btn-xs mb-3 mt-3 mr-1 ml-1" type="submit" data-toggle="modal" data-target="#importData"><i class="fa fa-upload"> Upload</i></button>
-                        </div>
                         <div class="au-card-inner">
                             <div class="table-responsive">
                                 <table id="tbl_process" class="table table-borderless table-striped table-earning">
@@ -71,46 +68,25 @@
             'columns': [
                     {
                         'title' : "ID",
-                        'data' : "id"
+                        'data' : "id_pesawat"
                     },
                     {
-                        'title' : "Nama",
+                        'title' : "Nama Pesawat",
                         'data' : "nama_pesawat"
                     },
                     {
-                        'title' : "Jenis",
-                        'data' : "nama_jenis_pesawat"
+                        'title' : "Fusi Informasi",
+                        'data' : "fusi"
                     },
                     {
-                        'title' : "Jenis Sayap",
-                        'data' : "jenis_sayap"
+                        'title' : "Jumlah Fusi",
+                        'data' : "jumlah_fusi"
                     },
                     {
-                        'title' : "Jenis Penempatan Sayap",
-                        'data' : "jenis_penempatan_sayap"
+                        'title' : "Naive Bayes",
+                        'data' : "naive_bayes"
                     },
-                    {
-                        'title' : "Arah Sayap",
-                        'data' : "arah_sayap"
-                    },
-                    {
-                        'title' : "Jenis Mesin",
-                        'data' : "jenis_mesin"
-                    },
-                    {
-                        'title' : "Badan Pesawat",
-                        'data' : "badan_pesawat"
-                    },
-                    {
-                        'title' : "Persenjataan",
-                        'data' : "persenjataan"
-                    },
-                    {
-                        'title' : "Warna",
-                        'data' : "warna"
-                    },
-                ]
-
+             ],
         });
     });
 </script>

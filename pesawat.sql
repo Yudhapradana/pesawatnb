@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Apr 18, 2021 at 06:02 PM
+-- Generation Time: Apr 26, 2021 at 05:54 PM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.10
 
@@ -37,8 +37,10 @@ CREATE TABLE `tbl_jenis_pesawat` (
 --
 
 INSERT INTO `tbl_jenis_pesawat` (`id_jenis_pesawat`, `nama_jenis_pesawat`) VALUES
-(1, 'Pesawat'),
-(2, 'Helikopter');
+(1, 'Pesawat Militer'),
+(2, 'Helikopter Militer'),
+(3, 'Pesawat Sipil'),
+(4, 'Helikopter Sipil');
 
 -- --------------------------------------------------------
 
@@ -58,36 +60,13 @@ CREATE TABLE `tbl_karakteristik` (
 INSERT INTO `tbl_karakteristik` (`id`, `name`) VALUES
 (2, 'Jenis Sayap'),
 (3, 'Penempatan Sayap'),
-(4, 'Jumlah Sayap'),
 (5, 'Arah Sayap'),
 (6, 'Jenis Mesin'),
-(7, 'Jumlah Mesin'),
 (8, 'Posisi Mesin'),
 (9, 'Badan Pesawat'),
 (10, 'Bentuk Ekor Pesawat'),
-(11, 'Jenis Landing Gear'),
-(12, 'Canard'),
 (13, 'Persenjataan'),
 (14, 'Warna');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `tbl_karakter_pesawat`
---
-
-CREATE TABLE `tbl_karakter_pesawat` (
-  `id_karakter_pesawat` int(11) NOT NULL,
-  `nama_karakter_pesawat` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `tbl_karakter_pesawat`
---
-
-INSERT INTO `tbl_karakter_pesawat` (`id_karakter_pesawat`, `nama_karakter_pesawat`) VALUES
-(1, 'Sipil'),
-(2, 'Militer');
 
 -- --------------------------------------------------------
 
@@ -99,20 +78,52 @@ CREATE TABLE `tbl_pesawat` (
   `id` int(11) NOT NULL,
   `nama_pesawat` varchar(35) CHARACTER SET utf8 DEFAULT NULL,
   `id_jenis_pesawat` int(11) DEFAULT NULL,
-  `id_karakter_pesawat` int(11) DEFAULT NULL,
   `id_jenis_sayap` int(11) DEFAULT NULL,
   `id_jenis_penempatan_sayap` int(11) DEFAULT NULL,
-  `id_jumlah_sayap` int(11) DEFAULT NULL,
   `id_arah_sayap` int(11) DEFAULT NULL,
   `id_jenis_mesin` int(11) DEFAULT NULL,
-  `id_jumlah_mesin` int(11) DEFAULT NULL,
-  `id_posisi_mesin` int(11) DEFAULT NULL,
   `id_badan_pesawat` int(11) DEFAULT NULL,
-  `id_jenis_ekor` int(11) DEFAULT NULL,
-  `id_jenis_landing_gear` int(11) DEFAULT NULL,
   `id_persenjataan` int(11) DEFAULT NULL,
-  `id_warna` int(11) DEFAULT NULL
+  `id_warna` int(11) DEFAULT NULL,
+  `id_posisi_mesin` int(11) NOT NULL,
+  `id_jenis_ekor` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tbl_pesawat`
+--
+
+INSERT INTO `tbl_pesawat` (`id`, `nama_pesawat`, `id_jenis_pesawat`, `id_jenis_sayap`, `id_jenis_penempatan_sayap`, `id_arah_sayap`, `id_jenis_mesin`, `id_badan_pesawat`, `id_persenjataan`, `id_warna`, `id_posisi_mesin`, `id_jenis_ekor`) VALUES
+(1, 'Chengdu J-7', 1, 3, 5, 13, 21, 37, 58, 60, 30, 44),
+(2, 'Chengdu J-10', 1, 3, 6, 15, 21, 37, 58, 60, 30, 44),
+(3, 'Chengdu J-20', 1, 3, 4, 15, 21, 38, 58, 60, 30, 45),
+(4, 'Shenyang J-8', 1, 3, 5, 15, 21, 38, 58, 60, 30, 44),
+(5, 'Shenyang J-11', 1, 3, 4, 13, 21, 38, 58, 60, 30, 45);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `tbl_process`
+--
+
+CREATE TABLE `tbl_process` (
+  `id` int(11) NOT NULL,
+  `id_pesawat` int(11) NOT NULL,
+  `fusi_informasi` varchar(255) NOT NULL,
+  `jumlah_fusi` int(11) NOT NULL,
+  `naive_bayes` float NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `tbl_process`
+--
+
+INSERT INTO `tbl_process` (`id`, `id_pesawat`, `fusi_informasi`, `jumlah_fusi`, `naive_bayes`) VALUES
+(1, 1, '1011001010001010', 1, 0.2),
+(2, 2, '1001101010010010', 1, 0.2),
+(3, 3, '1001100110011110', 1, 0.2),
+(4, 4, '1001100110010010', 1, 0.2),
+(5, 5, '1011000110011110', 1, 0.2);
 
 -- --------------------------------------------------------
 
@@ -139,10 +150,6 @@ INSERT INTO `tbl_spesifik` (`id_spesifik`, `id_karakteristik`, `kode_spesifik`, 
 (5, 3, 'MW', 'Mid Wings', '0000000000001000'),
 (6, 3, 'LW', 'Low Wings', '0000000000010000'),
 (7, 3, 'NP', 'Don\'t Have Wing Placement', '0000000000100000'),
-(8, 4, 'MP', 'Monoplane', '0000000001000000'),
-(9, 4, 'BP', 'Biplane', '0000000010000000'),
-(10, 4, 'TP', 'Triplane', '0000000100000000'),
-(11, 4, 'NW', 'Don\'t Have Wing', '0000001000000000'),
 (12, 5, 'SW', 'Straight Wings', '0000010000000000'),
 (13, 5, 'BW', 'Sweptback Wings', '0000100000000000'),
 (14, 5, 'FS', 'Forward Swept Wings', '0001000000000000'),
@@ -150,16 +157,10 @@ INSERT INTO `tbl_spesifik` (`id_spesifik`, `id_karakteristik`, `kode_spesifik`, 
 (16, 5, 'TW', 'Rotor Wings', '0100000000000000'),
 (17, 5, 'ND', 'Don\'t Have Wing Direction', '1000000000000000'),
 (18, 6, 'PS', 'Piston', '0100000000000001'),
-(19, 6, 'TJ', 'Turbo Jet', '0010000000000100'),
-(20, 6, 'UP', 'Turbo Prop', '0001000000001000'),
-(21, 6, 'TF', 'Turbo Fan', '0000100000010000'),
-(22, 6, 'TS', 'Turbo Shaft', '0000010000100000'),
-(23, 7, 'OM', '1 (One Machine)', '0000001001000000'),
-(24, 7, 'TM', '2 (Two Machine)', '0000000110000000'),
-(25, 7, 'RM', '3 (Three Machine)', '1000000110000000'),
-(26, 7, 'FM', '4 (Four Machine)', '1000000110000010'),
-(27, 7, 'VM', '5 (Five Machine)', '1000001001000010'),
-(28, 7, 'SM', '6 (Six Machine)', '0100001001000010'),
+(19, 6, 'TJ', 'TurboJet', '0010000000000100'),
+(20, 6, 'UP', 'TurboProp', '0001000000001000'),
+(21, 6, 'TF', 'TurboFan', '0000100000010000'),
+(22, 6, 'TS', 'TurboShaft', '0000010000100000'),
 (29, 8, 'OW', 'On The Wing', '0010010010000100'),
 (30, 8, 'BF', 'Behind Fuselage', '0001001100001000'),
 (31, 8, 'AF', 'Above Fuselage', '0000100011010000'),
@@ -183,21 +184,11 @@ INSERT INTO `tbl_spesifik` (`id_spesifik`, `id_karakteristik`, `kode_spesifik`, 
 (49, 10, 'VT', 'V-Tail', '0001000100000000'),
 (50, 10, 'NT', 'No Tail (double main rotor)', '0000011010000001'),
 (51, 10, 'TR', 'Tail Rotor', '0010001000000000'),
-(52, 10, 'DL ', 'Don’t have Tail', '1000000000100100'),
-(53, 11, 'FH', 'Folded Wheels', '0100010000000000'),
-(54, 11, 'NF', 'Wheels not folded', '1000100000000000'),
-(55, 11, 'SD', 'Skids', '1100010000001000'),
-(56, 12, 'HC', 'Have Canard', '1010001000000100'),
-(57, 12, 'NC', 'Don\'t Have Canard', '1001000100000010'),
-(58, 13, 'HE', 'Have Weaponary', '1000100010000000'),
+(52, 10, 'DL ', 'Don’t Have Tail', '1000000000100100'),
+(58, 13, 'HE', 'Have a Weapon', '1000100010000000'),
 (59, 13, 'NE', 'Don\'t Have Weaponary', '1000010001000000'),
-(60, 14, 'LR', 'Loreng Biru', '0011100000000000'),
-(61, 14, 'TR', 'Warna Komersil', '0000000001110000'),
-(62, 14, 'LB', 'Loreng Abu-abu', '0010100000000000'),
-(63, 14, 'HM', 'Hitam', '0110100000000000'),
-(64, 14, 'AB', 'Abu-abu', '0011010000000000'),
-(65, 14, 'LH', 'Loreng Hijau', '0100110000000000'),
-(66, 14, 'LC', 'Loreng Coklat', '0101010000000000');
+(60, 14, 'LR', 'Berloreng', '0011100000000000'),
+(61, 14, 'TR', 'Tidak Berloreng', '0000000001110000');
 
 -- --------------------------------------------------------
 
@@ -236,15 +227,15 @@ ALTER TABLE `tbl_karakteristik`
   ADD PRIMARY KEY (`id`) USING BTREE;
 
 --
--- Indexes for table `tbl_karakter_pesawat`
---
-ALTER TABLE `tbl_karakter_pesawat`
-  ADD PRIMARY KEY (`id_karakter_pesawat`);
-
---
 -- Indexes for table `tbl_pesawat`
 --
 ALTER TABLE `tbl_pesawat`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `tbl_process`
+--
+ALTER TABLE `tbl_process`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -267,31 +258,31 @@ ALTER TABLE `tbl_user`
 -- AUTO_INCREMENT for table `tbl_jenis_pesawat`
 --
 ALTER TABLE `tbl_jenis_pesawat`
-  MODIFY `id_jenis_pesawat` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_jenis_pesawat` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `tbl_karakteristik`
 --
 ALTER TABLE `tbl_karakteristik`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
-
---
--- AUTO_INCREMENT for table `tbl_karakter_pesawat`
---
-ALTER TABLE `tbl_karakter_pesawat`
-  MODIFY `id_karakter_pesawat` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT for table `tbl_pesawat`
 --
 ALTER TABLE `tbl_pesawat`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT for table `tbl_process`
+--
+ALTER TABLE `tbl_process`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `tbl_spesifik`
 --
 ALTER TABLE `tbl_spesifik`
-  MODIFY `id_spesifik` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=67;
+  MODIFY `id_spesifik` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
 
 --
 -- AUTO_INCREMENT for table `tbl_user`

@@ -7,30 +7,114 @@
 
 <!-- MAIN CONTENT-->
 <div class="main-content">
-<div class="section__content">
-<div class="container-fluid">
-<div class="row">
-    <div class="col-lg-12">
-        <div class="au-card recent-report">
-            <div class="au-card-inner">
-                <div class="table-responsive">
-                    <table id="tbl_karakteristik" class="table table-borderless table-striped table-earning">
+    <div class="section__content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="au-card recent-report">
+                        <div class="header-button float-right">
+                            <a href="javascript:void(0);" class="btn btn-success mb-3 mt-3 mr-1 ml-1" data-toggle="modal" data-target="#insertModal"><span class="fa fa-plus"> Tambah Data</span></a>
+                        </div>
+                        <div class="au-card-inner">
+                            <div class="table-responsive">
+                                <table id="tbl_karakteristik"
+                                       class="table table-borderless table-striped table-earning">
 
-                    </table>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="copyright">
+                        <p>Copyright © 2018 Colorlib. All rights reserved. Template by <a href="https://colorlib.com">Colorlib</a>.
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<div class="row">
-    <div class="col-md-12">
-        <div class="copyright">
-            <p>Copyright © 2018 Colorlib. All rights reserved. Template by <a href="https://colorlib.com">Colorlib</a>.</p>
+<div class="modal fade" id="insertModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="card">
+                <div class="card-header">
+                    <strong>Tambah Data</strong>
+                </div>
+                <div class="card-body card-block">
+                    <form action="{{ url_for('insertKarakteristik') }}" id="insert" method="POST">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <label for="name" class="pr-1  form-control-label">Karakteristik</label>
+                                <input class="form-control" type="text" id="name" name="name" placeholder="Karakteristik" required>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary btn-sm">
+                                <i class="fa fa-dot-circle-o"></i> Submit
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+<div class="modal fade" id="updateModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="card">
+                <div class="card-header">
+                    <strong>Update Data</strong>
+                </div>
+                <div class="card-body card-block">
+                    <form action="{{ url_for('updateKarakteristik') }}" id="update" method="POST">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <label for="uname" class="pr-1  form-control-label">Karakteristik</label>
+                                <input class="form-control" type="text" id="uname" name="uname" placeholder="Karakteristik" required>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <input id="uid" name="uid" hidden>
+                            <button type="submit" class="btn btn-primary btn-sm">
+                                <i class="fa fa-dot-circle-o"></i> Submit
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-</div>
+<div class="modal fade" id="deleteModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="card">
+                <div class="card-header">
+                    <strong>Delete Data</strong>
+                </div>
+                <div class="card-body card-block">
+                    <form action="{{ url_for('deleteKarakteristik') }}" id="delete" method="POST">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <font>Anda ingin menghapus <b><font id="dname"></font></b> ?</font>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <input id="did" name="did" hidden>
+                            <button type="submit" class="btn btn-primary btn-sm">
+                                <i class="fa fa-dot-circle-o"></i> Delete
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <!-- END MAIN CONTENT-->
 <script>
@@ -52,16 +136,37 @@
                         'title' : "Action",
                         'data' : (data) => {
                             let ret = "";
-                            ret += "<a class='btn btn-warning' href='#'>Edit</a>";
+                            ret += "<a class='btn btn-warning item_edit' href='javascript:void(0);' data-id='"+data.id+"' data-name='"+data.name+"'>Edit</a>";
                             ret += "    "
-                            ret += "<a class='btn btn-danger' href='#'>Delete</a>";
+                            ret += "<a class='btn btn-danger item_delete' href='javascript:void(0);' data-id='"+data.id+"' data-name='"+data.name+"'>Delete</a>";
                             return ret;
                         }
                     }
                 ]
 
         });
+
+        $('#tbl_karakteristik').on('click','.item_edit',function(){
+            var upid            = $(this).data('id');
+            var up_name        = $(this).data('name');
+
+            $('[name="uid"]').val(upid);
+            $('[name="uname"]').val(up_name);
+
+            $('#updateModal').modal('show');
+        });
+
+
+        $('#tbl_karakteristik').on('click','.item_delete',function(){
+            var id = $(this).data('id');
+            var nama = $(this).data('name');
+
+            $('#deleteModal').modal('show');
+            document.getElementById("dname").innerHTML=nama;
+            $('[name="did"]').val(id);
+        });
     });
+
 </script>
 <!-- END PAGE CONTAINER-->
 </div>

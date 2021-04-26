@@ -1,6 +1,6 @@
-No.;Jenis Sayap;Penempatan Sayap;Arah Sayap;Badan Pesawat;Persenjataan;Jenis Mesin;Warna;Jenis Pesawat;Nama Pesawat
-1;Fixed Wings;Mid Wings;Sweptback Wings;Subsonic;Have Weaponary;Turbo fan;Loreng;Pesawat Militer;Chengdu J-7
-2;Fixed Wings;Low Wings;Delta Wings;Subsonic;Have Weaponary;Turbo fan;Loreng;Pesawat Militer;Chengdu J-10
-3;Fixed Wings;High Wings;Delta Wings;Supersonic;Have Weaponary;Turbo fan;Loreng;Pesawat Militer;Chengdu J-20
-4;Fixed Wings;Mid Wings;Delta Wings;Supersonic;Have Weaponary;Turbo fan;Loreng;Pesawat Militer;Shenyang J-8
-5;Fixed Wings;High Wings;Sweptback Wings;Supersonic;Have Weaponary;Turbo fan;Loreng;Pesawat Militer;Shenyang J-11
+No.;Jenis Sayap;Penempatan Sayap;Arah Sayap;Jenis Mesin;Posisi Mesin;Badan Pesawat;Jenis Ekor;Persenjataan;Warna;Jenis Pesawat;Nama Pesawat
+1;Fixed Wings;Mid Wings;Sweptback Wings;Turbofan;Behind Fuselage;Subsonic;Conventional Tail;Have a Weapon;Berloreng;Pesawat Militer;Chengdu J-7
+2;Fixed Wings;Low Wings;Delta Wings;Turbofan;Behind Fuselage;Subsonic;Conventional Tail;Have a Weapon;Berloreng;Pesawat Militer;Chengdu J-10
+3;Fixed Wings;High Wings;Delta Wings;Turbofan;Behind Fuselage;Supersonic;Twin Tail;Have a Weapon;Berloreng;Pesawat Militer;Chengdu J-20
+4;Fixed Wings;Mid Wings;Delta Wings;Turbofan;Behind Fuselage;Supersonic;Conventional Tail;Have a Weapon;Berloreng;Pesawat Militer;Shenyang J-8
+5;Fixed Wings;High Wings;Sweptback Wings;Turbofan;Behind Fuselage;Supersonic;Twin Tail;Have a Weapon;Berloreng;Pesawat Militer;Shenyang J-11

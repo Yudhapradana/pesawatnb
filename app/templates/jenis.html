@@ -7,36 +7,120 @@
 
 <!-- MAIN CONTENT-->
 <div class="main-content">
-<div class="section__content">
-<div class="container-fluid">
-<div class="row">
-    <div class="col-lg-12">
-        <div class="au-card recent-report">
-            <div class="au-card-inner">
-                <div class="table-responsive">
-                    <table id="tbl_jenis" class="table table-borderless table-striped table-earning">
+    <div class="section__content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="au-card recent-report">
+                        <div class="header-button float-right">
+                            <a href="javascript:void(0);" class="btn btn-success mb-3 mt-3 mr-1 ml-1" data-toggle="modal" data-target="#insertModal"><span class="fa fa-plus"> Tambah Data</span></a>
+                        </div>
+                        <div class="au-card-inner">
+                            <div class="table-responsive">
+                                <table id="tbl_jenis" class="table table-borderless table-striped table-earning">
 
-                    </table>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="copyright">
+                        <p>Copyright © 2018 Colorlib. All rights reserved. Template by <a href="https://colorlib.com">Colorlib</a>.
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-<div class="row">
-    <div class="col-md-12">
-        <div class="copyright">
-            <p>Copyright © 2018 Colorlib. All rights reserved. Template by <a href="https://colorlib.com">Colorlib</a>.</p>
+<div class="modal fade" id="insertModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="card">
+                <div class="card-header">
+                    <strong>Tambah Data</strong>
+                </div>
+                <div class="card-body card-block">
+                    <form action="{{ url_for('insertJenis') }}" id="insert" method="POST">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <label for="jenis_pesawat" class="pr-1  form-control-label">Jenis Pesawat</label>
+                                <input class="form-control" type="text" id="jenis_pesawat" name="jenis_pesawat" placeholder="Jenis Pesawat" required>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <button type="submit" class="btn btn-primary btn-sm">
+                                <i class="fa fa-dot-circle-o"></i> Submit
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+<div class="modal fade" id="updateModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="card">
+                <div class="card-header">
+                    <strong>Update Data</strong>
+                </div>
+                <div class="card-body card-block">
+                    <form action="{{ url_for('updateJenis') }}" id="update" method="POST">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <label for="ujenis_pesawat" class="pr-1  form-control-label">Jenis Pesawat</label>
+                                <input class="form-control" type="text" id="ujenis_pesawat" name="ujenis_pesawat" placeholder="Jenis Pesawat" required>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <input id="uid" name="uid" hidden>
+                            <button type="submit" class="btn btn-primary btn-sm">
+                                <i class="fa fa-dot-circle-o"></i> Submit
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-</div>
+<div class="modal fade" id="deleteModal">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="card">
+                <div class="card-header">
+                    <strong>Delete Data</strong>
+                </div>
+                <div class="card-body card-block">
+                    <form action="{{ url_for('deleteJenis') }}" id="delete" method="POST">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="form-group">
+                                <font>Anda ingin menghapus <b><font id="djenis"></font></b> ?</font>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <input id="did" name="did" hidden>
+                            <button type="submit" class="btn btn-primary btn-sm">
+                                <i class="fa fa-dot-circle-o"></i> Delete
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <!-- END MAIN CONTENT-->
 <script>
     $(document).ready(function(){
-
-        $('#tbl_jenis').DataTable({
+        getData();
+        function getData(){
+            $('#tbl_jenis').DataTable({
             ajax : {
                 'url' : "{{ url_for('getJenis') }}",
             },
@@ -52,16 +136,39 @@
                         'title' : "Action",
                         'data' : (data) => {
                             let ret = "";
-                            ret += "<a class='btn btn-warning' href='#'>Edit</a>";
+                            ret += "<a class='btn btn-warning item_edit' href='javascript:void(0);' data-id='"+data.id+"' data-jenis='"+data.jenis+"'>Edit</a>";
                             ret += "    "
-                            ret += "<a class='btn btn-danger' href='#'>Delete</a>";
+                            ret += "<a class='btn btn-danger item_delete' href='javascript:void(0);' data-id='"+data.id+"' data-jenis='"+data.jenis+"'>Delete</a>";
                             return ret;
                         }
                     }
                 ]
+            });
+        }
 
+        $('#tbl_jenis').on('click','.item_edit',function(){
+            var upid            = $(this).data('id');
+            var up_jenis        = $(this).data('jenis');
+
+            $('[name="uid"]').val(upid);
+            $('[name="ujenis_pesawat"]').val(up_jenis);
+
+            $('#updateModal').modal('show');
+        });
+
+
+        $('#tbl_jenis').on('click','.item_delete',function(){
+            var id = $(this).data('id');
+            var nama = $(this).data('jenis');
+
+            $('#deleteModal').modal('show');
+            document.getElementById("djenis").innerHTML=nama;
+            $('[name="did"]').val(id);
         });
     });
+
+
+
 </script>
 <!-- END PAGE CONTAINER-->
 </div>
