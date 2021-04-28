@@ -1,4 +1,4 @@
-import csv, os, pandas as pd
+import csv, os, pandas as pd, numpy as np
 from werkzeug.utils import secure_filename
 from app import app
 from flask import render_template, request, redirect, url_for, flash, jsonify, session
@@ -38,7 +38,7 @@ def cek_login(username, password):
     t = (username, password)
     cursor.execute(sql, t)
     result = cursor.fetchall()
-    conn.close
+    conn.close()
     return result
 
 @app.route('/logout')
@@ -50,7 +50,7 @@ def logout():
 
 # ================================================
 # route untuk halaman dashboard
-@app.route('/index')
+@app.route('/index', methods=["GET", "POST"])
 def index():
     conn = mysql.connect()
     cursor = conn.cursor()
@@ -86,8 +86,89 @@ def index():
     cursor.execute(sql)
     ekor = cursor.fetchall()
 
+    sql = "SELECT tbl_spesifik.id_spesifik, tbl_spesifik.spesifik FROM tbl_spesifik INNER JOIN tbl_karakteristik ON tbl_karakteristik.id=tbl_spesifik.id_karakteristik WHERE tbl_karakteristik.name='Posisi Mesin'"
+    cursor.execute(sql)
+    posisi = cursor.fetchall()
+    datapxp = []
+    datapesawat = []
+    if request.method == 'POST':
+        jenis_sayap = request.form['jenis_sayap']
+        letak_sayap = request.form['letak_sayap']
+        arah_sayap = request.form['arah_sayap']
+        jenis_mesin = request.form['jenis_mesin']
+        posisi_mesin = request.form['posisi_mesin']
+        badan_pesawat = request.form['badan_pesawat']
+        persenjataan = request.form['persenjataan']
+        warna_pesawat = request.form['warna_pesawat']
+        jenis_ekor = request.form['jenis_ekor']
+        dataArray = [jenis_sayap, letak_sayap, arah_sayap, jenis_mesin, posisi_mesin, badan_pesawat, persenjataan,
+                     warna_pesawat, jenis_ekor]
+        bitArray = []
+        for row in dataArray:
+            sql = "SELECT bit_spesifik FROM tbl_spesifik WHERE id_spesifik=%s"
+            t = (str(row))
+            cursor.execute(sql, t)
+            result = cursor.fetchone()
+            bit = str(result).replace("'", "").replace("(", "").replace(")", "").replace(",", "")
+            bitArray.append(bit)
+        arr = np.array(bitArray)
+        newarr = arr.reshape(-1)
+        count = len(newarr[0])
+        a = xor(newarr[0], newarr[1], count)
+        a = xor(a, newarr[2], count)
+        a = xor(a, newarr[3], count)
+        a = xor(a, newarr[4], count)
+        a = xor(a, newarr[5], count)
+        a = xor(a, newarr[6], count)
+        a = xor(a, newarr[7], count)
+        a = xor(a, newarr[8], count)
+        sql = "SELECT * FROM tbl_jenis_pesawat"
+        cursor.execute(sql)
+        jenispesawat = cursor.fetchall()
+        arraypx = []
+        for row in jenispesawat:
+            sql = "SELECT jumlah_fusi FROM tbl_process INNER JOIN tbl_pesawat ON tbl_pesawat.id=tbl_process.id_pesawat INNER JOIN tbl_jenis_pesawat ON tbl_jenis_pesawat.id_jenis_pesawat=tbl_pesawat.id_jenis_pesawat WHERE fusi_informasi=%s AND tbl_jenis_pesawat.nama_jenis_pesawat=%s"
+            t = (str(a), row[1])
+            cursor.execute(sql, t)
+            countfusi = cursor.fetchone()
+            countfusi = str(countfusi).replace("(", "").replace(")", "").replace(",", "")
+            arraypx.append((row[1], countfusi))
+        sql = "SELECT tbl_jenis_pesawat.nama_jenis_pesawat, COUNT(tbl_pesawat.id_jenis_pesawat) FROM `tbl_pesawat` " \
+              "INNER JOIN tbl_jenis_pesawat ON tbl_jenis_pesawat.id_jenis_pesawat=tbl_pesawat.id_jenis_pesawat GROUP BY tbl_pesawat.id_jenis_pesawat"
+        cursor.execute(sql)
+        countjenis = cursor.fetchall()
+        valpx = []
+        for row in arraypx:
+            for rows in countjenis:
+                if row[0] == rows[0]:
+                    if row[1] == 'None':
+                        value = 0
+                        valpx.append((row[0], value))
+                    else:
+                        value = float(int(row[1]) / int(rows[1]))
+                        valpx.append((row[0], value))
+        sql = "SELECT * FROM tbl_pesawat"
+        cursor.execute(sql)
+        pesawat = cursor.fetchall()
+        countdataset = len(pesawat)
+        valtopxp = []
+        for row in valpx:
+            for rows in countjenis:
+                if row[0] == rows[0]:
+                    # print(row[1])
+                    # print(rows[1])
+                    # print(countdataset)
+                    # print(float(rows[1]/countdataset))
+                    value = float(row[1] * (float(rows[1] / countdataset)))
+                    if value != 0:
+                        valtopxp.append((row[0], value))
+        datapxp.append(max(valtopxp))
+        sql = "SELECT nama_pesawat FROM tbl_pesawat INNER JOIN tbl_process ON tbl_process.id_pesawat=tbl_pesawat.id WHERE tbl_process.fusi_informasi=%s"
+        t = (a)
+        cursor.execute(sql, t)
+        datapesawat = cursor.fetchall()
     conn.close()
-    return render_template('index.html', jenis=jenis, letak=letak, arah=arah, badan=badan, persenjataan=persenjataan, mesin=mesin, warna=warna, ekor=ekor)
+    return render_template('index.html', jenis=jenis, letak=letak, arah=arah, badan=badan, persenjataan=persenjataan, mesin=mesin, warna=warna, ekor=ekor, posisi=posisi, data=datapxp, datapesawat=datapesawat)
 
 # ================================================
 #route untuk halaman jenis pesawat
@@ -345,7 +426,6 @@ def getDataset():
           "INNER JOIN tbl_karakteristik as r ON r.id=a.id_karakteristik"
     cursor.execute(sql)
     result = cursor.fetchall()
-    print(result)
     conn.close()
     res = []
     for row in result:
@@ -531,11 +611,13 @@ def getProcessData():
     arrayres = []
     if len(tblprocess) != len(tblpesawat):
         sql = "SELECT p.id, nama_pesawat, j.nama_jenis_pesawat, a.bit_spesifik as jenis_sayap, b.bit_spesifik as jenis_penempatan_sayap, " \
-              "d.bit_spesifik as arah_sayap, e.bit_spesifik as jenis_mesin, h.bit_spesifik as badan_pesawat, m.bit_spesifik as persenjataan, " \
+              "d.bit_spesifik as arah_sayap, e.bit_spesifik as jenis_mesin, x.bit_spesifik as posisi_mesin, h.bit_spesifik as badan_pesawat, y.bit_spesifik as jenis_ekor, " \
+              "m.bit_spesifik as persenjataan, " \
               "n.bit_spesifik as warna, r.name FROM tbl_pesawat as p INNER JOIN tbl_jenis_pesawat as j ON p.id_jenis_pesawat=j.id_jenis_pesawat " \
               "INNER JOIN tbl_spesifik as a ON a.id_spesifik=p.id_jenis_sayap INNER JOIN tbl_spesifik as b ON b.id_spesifik=p.id_jenis_penempatan_sayap " \
               "INNER JOIN tbl_spesifik as d ON d.id_spesifik=p.id_arah_sayap INNER JOIN tbl_spesifik as e ON e.id_spesifik=p.id_jenis_mesin " \
               "INNER JOIN tbl_spesifik as h ON h.id_spesifik=p.id_badan_pesawat INNER JOIN tbl_spesifik as m ON m.id_spesifik=p.id_persenjataan " \
+              "INNER JOIN tbl_spesifik as x ON x.id_spesifik=p.id_posisi_mesin INNER JOIN tbl_spesifik as y ON y.id_spesifik=p.id_jenis_ekor "\
               "INNER JOIN tbl_spesifik as n ON n.id_spesifik=p.id_warna INNER JOIN tbl_karakteristik as r ON r.id=a.id_karakteristik"
         cursor.execute(sql)
         result = cursor.fetchall()
@@ -548,6 +630,8 @@ def getProcessData():
             a = xor(a, row[7], count)
             a = xor(a, row[8], count)
             a = xor(a, row[9], count)
+            a = xor(a, row[10], count)
+            a = xor(a, row[11], count)
             res.append((row[0], row[2], a))
         listfusi = []
         for row in res:

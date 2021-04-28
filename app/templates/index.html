@@ -19,7 +19,7 @@
                                         Kecerdasan Artifisal Naive Bayes Classifier dan Fusi Informasi</strong></center>
                                 </div>
                                 <div class="card-body card-block">
-                                    <form action="" method="post" class="">
+                                    <form action="{{ url_for('index') }}" method="POST" class="">
                                         <div class="col-12 row">
                                             <div class="col-6 form-group">
                                                 <label for="jenis_sayap" class=" form-control-label">Jenis Sayap</label>
@@ -35,7 +35,7 @@
                                         </div>
                                         <div class="col-12 row">
                                             <div class="col-6 form-group">
-                                                <label for="letak_sayap" class=" form-control-label">Letak Sayap</label>
+                                                <label for="letak_sayap" class=" form-control-label">Penempatan Sayap</label>
                                             </div>
                                             <div class="col-6 form-group">
                                                 <select name="letak_sayap" id="letak_sayap" class="form-control">
@@ -54,6 +54,32 @@
                                                 <select name="arah_sayap" id="arah_sayap" class="form-control">
                                                     <option value="0" hidden>Please select</option>
                                                     {% for row in arah: %}
+                                                    <option value="{{ row.0 }}">{{ row.1 }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 row">
+                                            <div class="col-6 form-group">
+                                                <label for="jenis_mesin" class=" form-control-label">Jenis Mesin</label>
+                                            </div>
+                                            <div class="col-6 form-group">
+                                                <select name="jenis_mesin" id="jenis_mesin" class="form-control">
+                                                    <option value="0" hidden>Please select</option>
+                                                    {% for row in mesin: %}
+                                                    <option value="{{ row.0 }}">{{ row.1 }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 row">
+                                            <div class="col-6 form-group">
+                                                <label for="posisi_mesin" class=" form-control-label">Posisi Mesin</label>
+                                            </div>
+                                            <div class="col-6 form-group">
+                                                <select name="posisi_mesin" id="posisi_mesin" class="form-control">
+                                                    <option value="0" hidden>Please select</option>
+                                                    {% for row in posisi: %}
                                                     <option value="{{ row.0 }}">{{ row.1 }}</option>
                                                     {% endfor %}
                                                 </select>
@@ -87,19 +113,6 @@
                                         </div>
                                         <div class="col-12 row">
                                             <div class="col-6 form-group">
-                                                <label for="mesin" class=" form-control-label">Mesin</label>
-                                            </div>
-                                            <div class="col-6 form-group">
-                                                <select name="mesin" id="mesin" class="form-control">
-                                                    <option value="0" hidden>Please select</option>
-                                                    {% for row in mesin: %}
-                                                    <option value="{{ row.0 }}">{{ row.1 }}</option>
-                                                    {% endfor %}
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-12 row">
-                                            <div class="col-6 form-group">
                                                 <label for="warna_pesawat" class=" form-control-label">Warna Pesawat</label>
                                             </div>
                                             <div class="col-6 form-group">
@@ -124,12 +137,20 @@
                                                 </select>
                                             </div>
                                         </div>
+                                        <div class="card-footer">
+                                            <button type="submit" class="btn btn-primary btn-sm">
+                                                <i class="fa fa-dot-circle-o"></i> Submit
+                                            </button>
+                                        </div>
                                     </form>
                                 </div>
-                                <div class="card-footer">
-                                    <button type="submit" class="btn btn-primary btn-sm">
-                                        <i class="fa fa-dot-circle-o"></i> Submit
-                                    </button>
+                                <div class="container">
+                                    <p>Hasil : <b>{{ "Teridentifikasi" if data else "Tidak Teridentifikasi" }}</b></p>
+                                    {% for row in data%}
+                                    <p>Jenis : <b>{{ row.0 }}</b> </p>
+                                    <p>Value : <b>{{ row.1 }}</b> </p>
+                                    {% endfor %}
+                                    <p>Nama Pesawat/Helikopter : {% for row in datapesawat%} <b>{{ row.0 }}</b>, {% endfor %}</p>
                                 </div>
                             </div>
                         </div>
