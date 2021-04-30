@@ -165,7 +165,7 @@ def index():
                     value = float(row[1] * (float(rows[1] / countdataset))) #dilakukan perhitungan hasil P(X|CI) * P(CI)
                     if value != 0: #jika hasilnya tidak sama dengan nol, disimpan didalam array
                         valtopxp.append((row[0], value))
-        if datapxp:
+        if valtopxp:
             datapxp.append(max(valtopxp)) #dicari nilai tertingginya
         sql = "SELECT nama_pesawat FROM tbl_pesawat INNER JOIN tbl_process ON tbl_process.id_pesawat=tbl_pesawat.id WHERE tbl_process.fusi_informasi=%s"
         t = (a)

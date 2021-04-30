@@ -147,9 +147,9 @@
                                 <div class="container">
                                     <p>Hasil : <b>{{ "Teridentifikasi" if data else "Tidak Teridentifikasi" }}</b></p>
                                     <p>Fusi Informasi : <b>{{ fusi if fusi else "-" }}</b></p>
-                                    <p>Jenis : <b>{% for row in data %} {{row.0 if row.0 else "-"}} {% endfor %}</b></p>
-                                    <p>Value : <b>{% for row in data %} {{row.1 if row.1 else "-"}} {% endfor %}</b></p>
-                                    <p>Nama Pesawat/Helikopter : {% for row in datapesawat%} <b>{{ row.0 if row.0 else "-"}}</b>, {% endfor %}</p>
+                                    <p>Jenis : <b>{%if data%}{% for row in data %} {{row.0}} {% endfor %}{% else %}{{ '-' }}{% endif %}</b></p>
+                                    <p>Value : <b>{%if data%}{% for row in data %} {{row.1}} {% endfor %}{% else %}{{ '-' }}{% endif %}</b></p>
+                                    <p>Nama Pesawat/Helikopter : {%if data%}{% for row in datapesawat%} <b>{{ row.0 }}</b>, {% endfor %}{% else %}{{ '-' }}{% endif %}</p>
                                 </div>
                             </div>
                         </div>
