@@ -122,8 +122,9 @@
         function getData(){
             $('#tbl_jenis').DataTable({
             ajax : {
-                'url' : "{{ url_for('getJenis') }}",
+                'url' : "{{ url_for('getJenis') }}", //memanggil fungsi getjenis
             },
+            //mengatur kolom untuk table
             'columns': [
                     {
                         'title' : "ID",
@@ -136,6 +137,7 @@
                         'title' : "Action",
                         'data' : (data) => {
                             let ret = "";
+                            //mengirim data ke button disetiap barisnya untuk proses update dan delete
                             ret += "<a class='btn btn-warning item_edit' href='javascript:void(0);' data-id='"+data.id+"' data-jenis='"+data.jenis+"'>Edit</a>";
                             ret += "    "
                             ret += "<a class='btn btn-danger item_delete' href='javascript:void(0);' data-id='"+data.id+"' data-jenis='"+data.jenis+"'>Delete</a>";
@@ -145,7 +147,7 @@
                 ]
             });
         }
-
+        //proses untuk menampilkan data yang mau diedit
         $('#tbl_jenis').on('click','.item_edit',function(){
             var upid            = $(this).data('id');
             var up_jenis        = $(this).data('jenis');
@@ -156,7 +158,7 @@
             $('#updateModal').modal('show');
         });
 
-
+        //proses untuk menampilkan konfirmasi data yang mau dihapus
         $('#tbl_jenis').on('click','.item_delete',function(){
             var id = $(this).data('id');
             var nama = $(this).data('jenis');

@@ -122,8 +122,9 @@
 
         $('#tbl_karakteristik').DataTable({
             ajax : {
-                'url' : "{{ url_for('getKarakteristik') }}",
+                'url' : "{{ url_for('getKarakteristik') }}", //memanggil fungsi getkarakteristik untuk ambil data
             },
+            //megatur kolom untuk tabel
             'columns': [
                     {
                         'title' : "ID",
@@ -136,6 +137,7 @@
                         'title' : "Action",
                         'data' : (data) => {
                             let ret = "";
+                            //mengirim data ke button disetiap barisnya untuk proses update dan delete
                             ret += "<a class='btn btn-warning item_edit' href='javascript:void(0);' data-id='"+data.id+"' data-name='"+data.name+"'>Edit</a>";
                             ret += "    "
                             ret += "<a class='btn btn-danger item_delete' href='javascript:void(0);' data-id='"+data.id+"' data-name='"+data.name+"'>Delete</a>";
@@ -145,7 +147,7 @@
                 ]
 
         });
-
+        //proses untuk ambil data untuk diupdate
         $('#tbl_karakteristik').on('click','.item_edit',function(){
             var upid            = $(this).data('id');
             var up_name        = $(this).data('name');
@@ -156,7 +158,7 @@
             $('#updateModal').modal('show');
         });
 
-
+        //proses untuk menampilkan konfirmasi data yang akan dihapus
         $('#tbl_karakteristik').on('click','.item_delete',function(){
             var id = $(this).data('id');
             var nama = $(this).data('name');

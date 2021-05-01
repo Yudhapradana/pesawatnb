@@ -166,6 +166,7 @@
     $(document).ready(function(){
 
         $('#tbl_spesifik').DataTable({
+            //settingan untuk datatable
             scrollY:        "800px",
             scrollX:        true,
             scrollCollapse: true,
@@ -175,8 +176,9 @@
                 rightColumns: 1
             },
             ajax : {
-                'url' : "{{ url_for('getSpesifik') }}",
+                'url' : "{{ url_for('getSpesifik') }}", //memanggil fungsi getSpesifik dari file routes
             },
+            //mengatur kolom untuk table
             'columns': [
                     {
                         'title' : "ID",
@@ -202,6 +204,7 @@
                         'title' : "Action",
                         'data' : (data) => {
                             let ret = "";
+                            //mengirim data ke button disetiap barisnya untuk proses update dan delete
                             ret += "<a class='btn btn-warning item_edit' href='javascript:void(0);' data-id='"+data.id+"' data-id_karakteristik='"+data.id_karakteristik+"' data-kode='"+data.kode_spesifik+"' data-spesifik='"+data.spesifik+"' data-bit='"+data.bit_spesifik+"'>Edit</a>";
                             ret += "    "
                             ret += "<a class='btn btn-danger item_delete' href='javascript:void(0);' data-id='"+data.id+"' data-id_karakteristik='"+data.id_karakteristik+"' data-kode='"+data.kode_spesifik+"' data-spesifik='"+data.spesifik+"' data-bit='"+data.bit_spesifik+"'>Delete</a>";
@@ -210,7 +213,7 @@
                     }
                 ],
         });
-
+        //proses untuk menampilkan data untuk update
         $('#tbl_spesifik').on('click','.item_edit',function(){
             var upid            = $(this).data('id');
             var id_karakteristik= $(this).data('id_karakteristik');
@@ -227,7 +230,7 @@
             $('#updateModal').modal('show');
         });
 
-
+        //proses untuk menampilkan konfirmasi data yang akan dihapus
         $('#tbl_spesifik').on('click','.item_delete',function(){
             var id = $(this).data('id');
             var nama = $(this).data('spesifik');

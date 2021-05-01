@@ -186,48 +186,48 @@ def jenis():
 def getJenis():
     conn = mysql.connect()
     cursor = conn.cursor()
-    sql = "SELECT * FROM tbl_jenis_pesawat"
+    sql = "SELECT * FROM tbl_jenis_pesawat" #ambil data jenis pesawat
     cursor.execute(sql)
     result = cursor.fetchall()
     conn.close()
 
     res = []
-    for row in result:
+    for row in result: #dilakukan perulangan untuk dimasukkan kedalam array dan diberi index
         res.append({"id" : row[0], "jenis" : row[1]})
 
     data = {}
     data["data"] = res #menyimpan hasil select ke variable data
-    return jsonify(data)
+    return jsonify(data) #kirim data ke html dalam bentuk json
 
 @app.route('/insertJenis', methods=["POST"])
 def insertJenis():
-    name = request.form['jenis_pesawat']
+    name = request.form['jenis_pesawat'] #ambil inputan jenis pesawat
     conn = mysql.connect()
     cursor = conn.cursor()
-    sql = "INSERT INTO tbl_jenis_pesawat (nama_jenis_pesawat) VALUES (%s)"
-    t = (name)
+    sql = "INSERT INTO tbl_jenis_pesawat (nama_jenis_pesawat) VALUES (%s)" #sql untuk insert data
+    t = (name) #parameter yang di inputkan
     cursor.execute(sql, t)
     conn.commit()
     return redirect(url_for('jenis'))
 
 @app.route('/updateJenis', methods=["POST"])
 def updateJenis():
-    jenis = request.form['ujenis_pesawat']
-    id = request.form['uid']
+    jenis = request.form['ujenis_pesawat'] #ambil inputan jenis pesawat
+    id = request.form['uid'] #ambil inputan id jenis pesawat
     conn = mysql.connect()
     cursor = conn.cursor()
-    sql = "UPDATE tbl_jenis_pesawat SET nama_jenis_pesawat=%s WHERE id_jenis_pesawat=%s"
-    t = (jenis, id)
+    sql = "UPDATE tbl_jenis_pesawat SET nama_jenis_pesawat=%s WHERE id_jenis_pesawat=%s" #sql untuk update
+    t = (jenis, id) #parameter untuk update
     cursor.execute(sql, t)
     conn.commit()
     return redirect(url_for('jenis'))
 
 @app.route('/deleteJenis', methods=["POST"])
 def deleteJenis():
-    id = request.form['did']
+    id = request.form['did'] #ambil id jenis pesawat
     conn = mysql.connect()
     cursor = conn.cursor()
-    sql = "DELETE FROM tbl_jenis_pesawat WHERE id_jenis_pesawat=%s"
+    sql = "DELETE FROM tbl_jenis_pesawat WHERE id_jenis_pesawat=%s" #sql untuk menghapus data
     t = (id)
     cursor.execute(sql, t)
     conn.commit()
@@ -243,49 +243,49 @@ def karakteristik():
 def getKarakteristik():
     conn = mysql.connect()
     cursor = conn.cursor()
-    sql = "SELECT * FROM tbl_karakteristik"
+    sql = "SELECT * FROM tbl_karakteristik" #ambil data karakteristik
     cursor.execute(sql)
     result = cursor.fetchall()
     conn.close()
 
     res = []
-    for row in result:
-        res.append({"id" : row[0], "name" : row[1]})
+    for row in result: #dilakukan perulangan untuk dimasukkan kedalam array dan diberi index
+        res.append({"id" : row[0], "name" : row[1]}) #di inputkan ke array res
 
     data = {}
-    data["data"] = res
-    return jsonify(data)
+    data["data"] = res #menyimpan res ke variable data
+    return jsonify(data) #kirim data ke html
 
 @app.route('/insertKarakteristik', methods=["POST"])
 def insertKarakteristik():
-    name = request.form['name']
+    name = request.form['name'] #ambil inputan nama karakteristik dari form
     conn = mysql.connect()
     cursor = conn.cursor()
-    sql = "INSERT INTO tbl_karakteristik(name) VALUES (%s)"
-    t = (name)
+    sql = "INSERT INTO tbl_karakteristik(name) VALUES (%s)" #sql untuk insert
+    t = (name) #parameter yang mau di insert
     cursor.execute(sql, t)
     conn.commit()
     return redirect(url_for('karakteristik'))
 
 @app.route('/updateKarakteristik', methods=["POST"])
 def updateKarakteristik():
-    name = request.form['uname']
-    id = request.form['uid']
+    name = request.form['uname'] #ambil inputan nama karakteristik dari form
+    id = request.form['uid'] #ambil inputan id dari form
     conn = mysql.connect()
     cursor = conn.cursor()
-    sql = "UPDATE tbl_karakteristik SET name=%s WHERE id=%s"
-    t = (name, id)
+    sql = "UPDATE tbl_karakteristik SET name=%s WHERE id=%s" #sql untuk update
+    t = (name, id) #parameter untuk update
     cursor.execute(sql, t)
     conn.commit()
     return redirect(url_for('karakteristik'))
 
 @app.route('/deleteKarakteristik', methods=["POST"])
 def deleteKarakteristik():
-    id = request.form['did']
+    id = request.form['did'] #ambil data id dari form
     conn = mysql.connect()
     cursor = conn.cursor()
-    sql = "DELETE FROM tbl_karakteristik WHERE id=%s"
-    t = (id)
+    sql = "DELETE FROM tbl_karakteristik WHERE id=%s" #sql untuk proses delete
+    t = (id) #parameter untuk delete berdasarkan id
     cursor.execute(sql, t)
     conn.commit()
     return redirect(url_for('karakteristik'))
@@ -295,65 +295,66 @@ def deleteKarakteristik():
 def spesifik():
     conn = mysql.connect()
     cursor = conn.cursor()
-    sql = "SELECT * FROM tbl_karakteristik"
+    sql = "SELECT * FROM tbl_karakteristik" #ambil data karakteristik untuk form select option
     cursor.execute(sql)
     karakteristik = cursor.fetchall()
     conn.close()
-    return render_template('spesifik.html', karakteristik=karakteristik)
+    return render_template('spesifik.html', karakteristik=karakteristik) #lempar data ke file html
 
 #fungsi untuk ambil data spesifik pesawat
 @app.route('/getSpesifik')
 def getSpesifik():
     conn = mysql.connect()
     cursor = conn.cursor()
+    #sql untuk mengambil data dari database
     sql = "SELECT s.id_spesifik, k.name, s.kode_spesifik, s.spesifik, s.bit_spesifik, s.id_karakteristik FROM tbl_spesifik as s INNER JOIN tbl_karakteristik as k ON k.id=s.id_karakteristik"
     cursor.execute(sql)
     result = cursor.fetchall()
     conn.close()
 
     res = []
-    for row in result:
-        res.append({"id" : row[0], "name_karakteristik" : row[1], "kode_spesifik" : row[2], "spesifik" : row[3], "bit_spesifik" : row[4], "id_karakteristik" : row[5]})
+    for row in result:#dilakukan perulangan untuk dimasukkan kedalam array dan diberi index
+        res.append({"id" : row[0], "name_karakteristik" : row[1], "kode_spesifik" : row[2], "spesifik" : row[3], "bit_spesifik" : row[4], "id_karakteristik" : row[5]}) #di input ke variable res
 
     data = {}
-    data["data"] = res
+    data["data"] = res #array res disimpan ke variable data
     return jsonify(data)
 
 @app.route('/insertSpesifik', methods=["POST"])
 def insertSpesifik():
-    karakteristik = request.form['karakteristik']
-    kode = request.form['kode_spesifik']
-    spesifik = request.form['spesifik']
-    bit = request.form['bit_spesifik']
+    karakteristik = request.form['karakteristik'] #ambil inputan tipe karakteristik
+    kode = request.form['kode_spesifik'] #ambil inputan data kode spesifik
+    spesifik = request.form['spesifik'] #ambil inputan nama spesifik
+    bit = request.form['bit_spesifik'] #ambil inputan bit spesifik
     conn = mysql.connect()
     cursor = conn.cursor()
-    sql = "INSERT INTO tbl_spesifik(id_karakteristik, kode_spesifik, spesifik, bit_spesifik) VALUES (%s, %s, %s, %s)"
-    t = (karakteristik, kode, spesifik, bit)
+    sql = "INSERT INTO tbl_spesifik(id_karakteristik, kode_spesifik, spesifik, bit_spesifik) VALUES (%s, %s, %s, %s)" #sql untuk input
+    t = (karakteristik, kode, spesifik, bit) #parameter untuk input data
     cursor.execute(sql, t)
     conn.commit()
     return redirect(url_for('spesifik'))
 
 @app.route('/updateSpesifik', methods=["POST"])
 def updateSpesifik():
-    id = request.form['uid']
-    karakteristik = request.form['ukarakteristik']
-    kode = request.form['ukode_spesifik']
-    spesifik = request.form['uspesifik']
-    bit = request.form['ubit_spesifik']
+    id = request.form['uid']#ambil id spesifik
+    karakteristik = request.form['ukarakteristik'] #ambil inputan tipe karakteristik
+    kode = request.form['ukode_spesifik'] #ambil inputan tipe spesifik
+    spesifik = request.form['uspesifik'] #ambil inputan nama spesifik
+    bit = request.form['ubit_spesifik'] #ambil inputan bit spesifik
     conn = mysql.connect()
     cursor = conn.cursor()
-    sql = "UPDATE tbl_spesifik SET id_karakteristik=%s, kode_spesifik=%s, spesifik=%s, bit_spesifik=%s WHERE id_spesifik=%s"
-    t = (karakteristik, kode, spesifik, bit, id)
+    sql = "UPDATE tbl_spesifik SET id_karakteristik=%s, kode_spesifik=%s, spesifik=%s, bit_spesifik=%s WHERE id_spesifik=%s" #sql update
+    t = (karakteristik, kode, spesifik, bit, id) #parameter inputan
     cursor.execute(sql, t)
     conn.commit()
     return redirect(url_for('spesifik'))
 
 @app.route('/deleteSpesifik', methods=["POST"])
 def deleteSpesifik():
-    id = request.form['did']
+    id = request.form['did'] #ambil id dari form untuk proses delete
     conn = mysql.connect()
     cursor = conn.cursor()
-    sql = "DELETE FROM tbl_spesifik WHERE id_spesifik=%s"
+    sql = "DELETE FROM tbl_spesifik WHERE id_spesifik=%s" #sql untuk delete
     t = (id)
     cursor.execute(sql, t)
     conn.commit()
@@ -365,43 +366,43 @@ def deleteSpesifik():
 def dataset():
     conn = mysql.connect()
     cursor = conn.cursor()
-
+    #ambil data untuk select option jenis pesawat
     sql = "SELECT * FROM tbl_jenis_pesawat"
     cursor.execute(sql)
     jenis = cursor.fetchall()
-
+    #ambil data untuk select option jenis sayap
     sql = "SELECT * FROM tbl_spesifik INNER JOIN tbl_karakteristik ON tbl_karakteristik.id=tbl_spesifik.id_karakteristik WHERE name='Jenis Sayap'"
     cursor.execute(sql)
     js = cursor.fetchall()
-
+    # ambil data untuk select option penempatan sayap
     sql = "SELECT * FROM tbl_spesifik INNER JOIN tbl_karakteristik ON tbl_karakteristik.id=tbl_spesifik.id_karakteristik WHERE name='Penempatan Sayap'"
     cursor.execute(sql)
     jp = cursor.fetchall()
-
+    # ambil data untuk select option arah sayap
     sql = "SELECT * FROM tbl_spesifik INNER JOIN tbl_karakteristik ON tbl_karakteristik.id=tbl_spesifik.id_karakteristik WHERE name='Arah Sayap'"
     cursor.execute(sql)
     rs = cursor.fetchall()
-
+    ##ambil data untuk select option jenis mesin
     sql = "SELECT * FROM tbl_spesifik INNER JOIN tbl_karakteristik ON tbl_karakteristik.id=tbl_spesifik.id_karakteristik WHERE name='Jenis Mesin'"
     cursor.execute(sql)
     jm = cursor.fetchall()
-
+    # ambil data untuk select option badan pesawat
     sql = "SELECT * FROM tbl_spesifik INNER JOIN tbl_karakteristik ON tbl_karakteristik.id=tbl_spesifik.id_karakteristik WHERE name='Badan Pesawat'"
     cursor.execute(sql)
     bp = cursor.fetchall()
-
+    # ambil data untuk select option persenjataan
     sql = "SELECT * FROM tbl_spesifik INNER JOIN tbl_karakteristik ON tbl_karakteristik.id=tbl_spesifik.id_karakteristik WHERE name='Persenjataan'"
     cursor.execute(sql)
     ps = cursor.fetchall()
-
+    # ambil data untuk select option jenis pesawat
     sql = "SELECT * FROM tbl_spesifik INNER JOIN tbl_karakteristik ON tbl_karakteristik.id=tbl_spesifik.id_karakteristik WHERE name='Warna'"
     cursor.execute(sql)
     wn = cursor.fetchall()
-
+    # ambil data untuk select option posisi mesin
     sql = "SELECT * FROM tbl_spesifik INNER JOIN tbl_karakteristik ON tbl_karakteristik.id=tbl_spesifik.id_karakteristik WHERE name='Posisi Mesin'"
     cursor.execute(sql)
     pm = cursor.fetchall()
-
+    # ambil data untuk select option jenis ekor
     sql = "SELECT * FROM tbl_spesifik INNER JOIN tbl_karakteristik ON tbl_karakteristik.id=tbl_spesifik.id_karakteristik WHERE name='Bentuk Ekor Pesawat'"
     cursor.execute(sql)
     je = cursor.fetchall()
@@ -414,6 +415,7 @@ def dataset():
 def getDataset():
     conn = mysql.connect()
     cursor = conn.cursor()
+    #sql untuk menampilkan dataset ke halaman html
     sql = "SELECT p.id, nama_pesawat, j.nama_jenis_pesawat, a.spesifik as jenis_sayap, b.spesifik as jenis_penempatan_sayap, " \
           "d.spesifik as arah_sayap, e.spesifik as jenis_mesin, h.spesifik as badan_pesawat, m.spesifik as persenjataan, " \
           "n.spesifik as warna, o.spesifik as posisi_mesin, q.spesifik as jenis_ekor, j.id_jenis_pesawat, a.id_spesifik as id_jenis_sayap, " \
@@ -435,7 +437,8 @@ def getDataset():
     result = cursor.fetchall()
     conn.close()
     res = []
-    for row in result:
+    for row in result: #dilakukan perulangan untuk dimasukkan kedalam array dan diberi index
+        #lalu di input ke array res
         res.append({"id" : row[0], "nama_pesawat" : row[1], "nama_jenis_pesawat" : row[2],
                     "jenis_sayap" : row[3], "jenis_penempatan_sayap" : row[4], "arah_sayap" : row[5],
                     "jenis_mesin" : row[6], "badan_pesawat" : row[7],
@@ -445,7 +448,7 @@ def getDataset():
                     "id_persenjataan" : row[18], "id_warna" : row[19], "id_posisi_mesin" : row[20], "id_jenis_ekor" : row[21]})
 
     data = {}
-    data["data"] = res
+    data["data"] = res #menyimpan data dari array res ke array data dengan index data
     return jsonify(data)
 
 # ================================================

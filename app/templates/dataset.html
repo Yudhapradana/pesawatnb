@@ -363,7 +363,7 @@
 <!-- END MAIN CONTENT-->
 <script>
     $(document).ready(function(){
-
+    //disni proses untuk menampilkan data
         $('#tbl_dataset').DataTable({
             scrollY:        "800px",
             scrollX:        true,
@@ -374,8 +374,9 @@
                 rightColumns: 1
             },
             ajax : {
-                'url' : "{{ url_for('getDataset') }}",
+                'url' : "{{ url_for('getDataset') }}", //memanggil fungsi getDataset
             },
+            // mengatur kolom untuk tabel
             'columns': [
                     {
                         'title' : "ID",
@@ -429,6 +430,7 @@
                         'title' : "Action",
                         'data' : (data) => {
                             let ret = "";
+                            //mengirim data ke button disetiap barisnya untuk proses update dan delete
                             ret += "<a class='btn btn-warning item_edit' href='javascript:void(0);' data-id='"+data.id+"' data-nama='"+data.nama_pesawat+"' data-id_jenis_pesawat='"+data.id_jenis_pesawat+"' data-id_jenis_sayap='"+data.id_jenis_sayap+"' data-id_penempatan_sayap='"+data.id_penempatan_sayap+"' data-id_arah_sayap='"+data.id_arah_sayap+"' data-id_jenis_mesin='"+data.id_jenis_mesin+"' data-id_badan_pesawat='"+data.id_badan_pesawat+"' data-id_persenjataan='"+data.id_persenjataan+"' data-id_warna='"+data.id_warna+"' data-id_posisi_mesin='"+data.id_posisi_mesin+"' data-id_jenis_ekor='"+data.id_jenis_ekor+"'>Edit</a>";
                             ret += "    "
                             ret += "<a class='btn btn-danger item_delete' href='javascript:void(0);' data-id='"+data.id+"' data-nama='"+data.nama_pesawat+"' data-nama_jenis_pesawat='"+data.nama_jenis_pesawat+"' data-id_jenis_sayap='"+data.id_jenis_sayap+"' data-id_penempatan_sayap='"+data.id_penempatan_sayap+"' data-id_arah_sayap='"+data.id_arah_sayap+"' data-id_jenis_mesin='"+data.id_jenis_mesin+"' data-id_badan_pesawat='"+data.id_badan_pesawat+"' data-id_persenjataan='"+data.id_persenjataan+"' data-id_warna='"+data.id_warna+"' data-id_posisi_mesin='"+data.id_posisi_mesin+"' data-id_jenis_ekor='"+data.id_jenis_ekor+"'>Delete</a>";
@@ -438,7 +440,7 @@
                 ]
 
         });
-
+        // proses menampilkan data yang mau diedit
         $('#tbl_dataset').on('click','.item_edit',function(){
             var upid          = $(this).data('id');
             var nama          = $(this).data('nama');
@@ -469,7 +471,7 @@
             $('#updateModal').modal('show');
         });
 
-
+        // proses untuk menampilkan konfirmasi data yang mau dihapus
         $('#tbl_dataset').on('click','.item_delete',function(){
             var id = $(this).data('id');
             var nama = $(this).data('nama');

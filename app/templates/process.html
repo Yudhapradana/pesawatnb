@@ -63,8 +63,9 @@
 
         $('#tbl_process').DataTable({
             ajax : {
-                'url' : "{{ url_for('getProcessData') }}",
+                'url' : "{{ url_for('getProcessData') }}", //memanggil fungsi getPtocessdata dari route
             },
+            //mengatur kolom untuk table
             'columns': [
                     {
                         'title' : "ID",
