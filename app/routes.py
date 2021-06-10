@@ -55,7 +55,10 @@ def logout():
 def index():
     conn = mysql.connect()
     cursor = conn.cursor()
-    #ambil data jenispesawat untuk select option
+    sql = "SELECT * FROM tbl_jenis_pesawat"
+    cursor.execute(sql)
+    jenispesawat = cursor.fetchall()
+    #ambil data jenisayap untuk select option
     sql = "SELECT tbl_spesifik.id_spesifik, tbl_spesifik.spesifik FROM tbl_spesifik INNER JOIN tbl_karakteristik ON tbl_karakteristik.id=tbl_spesifik.id_karakteristik WHERE tbl_karakteristik.name='Jenis Sayap'"
     cursor.execute(sql)
     jenis = cursor.fetchall()
@@ -92,10 +95,92 @@ def index():
     cursor.execute(sql)
     posisi = cursor.fetchall()
 
+    # a = None
+    # datapxp = []  # array untuk menyimpan data P(X|CI) * P(CI)
+    # datapesawat = []  # array untuk menyimpan data pesawat yang teridentifikasi
+    # # =========================================================================
+    # sql = "SELECT id_jenis_sayap, id_jenis_penempatan_sayap, id_arah_sayap, id_jenis_mesin, id_posisi_mesin, id_badan_pesawat, id_persenjataan, id_warna, id_jenis_ekor, nama_jenis_pesawat FROM tbl_pesawat " \
+    #       "INNER JOIN tbl_jenis_pesawat ON tbl_jenis_pesawat.id_jenis_pesawat=tbl_pesawat.id_jenis_pesawat WHERE id <=20"
+    # cursor.execute(sql)
+    # getDataTesting = cursor.fetchall()
+    # bitArray = []
+    # # ===================================================== testing
+    # counttrue= 0
+    # for i in getDataTesting:  # perulangan array yang menyimpan inputan dari form
+    #     for row in i:
+    #         sql = "SELECT bit_spesifik FROM tbl_spesifik WHERE id_spesifik=%s"  # ambil data bit spesifik sesuai inputan
+    #         t = (str(row))  # parameter untuk ambil data bit satu satu
+    #         cursor.execute(sql, t)
+    #         result = cursor.fetchone()
+    #         bit = str(result).replace("'", "").replace("(", "").replace(")", "").replace(",","")  # convert bentuk data bit dari ('00101010100',) ke 00101010100
+    #         bitArray.append(bit)  # ditambahkan ke array baru
+    #     arr = np.array(bitArray)
+    #     newarr = arr.reshape(-1)  # mengubah bentuk array dari 9 array jadi 1 array
+    #     count = len(newarr[0])
+    #     # proses menghitung fusi informasi/xor
+    #     a = xor(newarr[0], newarr[1], count)
+    #     a = xor(a, newarr[2], count)
+    #     a = xor(a, newarr[3], count)
+    #     a = xor(a, newarr[4], count)
+    #     a = xor(a, newarr[5], count)
+    #     a = xor(a, newarr[6], count)
+    #     a = xor(a, newarr[7], count)
+    #     a = xor(a, newarr[8], count)
+    #     sql = "SELECT * FROM tbl_jenis_pesawat"
+    #     cursor.execute(sql)
+    #     jenispesawat = cursor.fetchall()
+    #     arraypx = []
+    #     for row in jenispesawat:
+    #         sql = "SELECT jumlah_fusi FROM tbl_process INNER JOIN tbl_pesawat ON tbl_pesawat.id=tbl_process.id_pesawat INNER JOIN tbl_jenis_pesawat ON tbl_jenis_pesawat.id_jenis_pesawat=tbl_pesawat.id_jenis_pesawat WHERE fusi_informasi=%s AND tbl_jenis_pesawat.nama_jenis_pesawat=%s"
+    #         t = (str(a), row[1])
+    #         cursor.execute(sql, t)
+    #         # disini proses untuk mencari jumlah fusi yang sama disetiap jenis
+    #         countfusi = cursor.fetchone()
+    #         countfusi = str(countfusi).replace("(", "").replace(")", "").replace(",", "")
+    #         arraypx.append((row[1], countfusi))  # menyimpan nama jenis pesawat dan jumlah fusi yang sama
+    #     sql = "SELECT tbl_jenis_pesawat.nama_jenis_pesawat, COUNT(tbl_pesawat.id_jenis_pesawat) FROM `tbl_pesawat` " \
+    #           "INNER JOIN tbl_jenis_pesawat ON tbl_jenis_pesawat.id_jenis_pesawat=tbl_pesawat.id_jenis_pesawat GROUP BY tbl_pesawat.id_jenis_pesawat"  # ambil jumlah data masing" dataset setiap jenis
+    #     cursor.execute(sql)
+    #     countjenis = cursor.fetchall()
+    #     valpx = []
+    #     # mencari p fusi informasi
+    #     for row in arraypx:  # perulangan untuk jenis pesawat dan jumlah fusi yang sama
+    #         for rows in countjenis:  # perulangan ambil jumlah data masing" dataset setiap jenis
+    #             if row[0] == rows[0]:  # jika nama jenis pesawat sama
+    #                 if row[1] == 'None':  # jika nilainya none maka diset 0
+    #                     value = 0
+    #                     valpx.append((row[0], value))  # dimasukkan ke dalam array
+    #                 else:  # jika tidak dilakukan perhitungan, jumlah fusi yang sama dibagi jumlah dataset setiap jenis pesawat
+    #                     value = float(int(row[1]) / int(rows[1]))
+    #                     valpx.append((row[0], value))  # dimasukkan ke dalam array
+    #     sql = "SELECT * FROM tbl_pesawat"
+    #     cursor.execute(sql)
+    #     pesawat = cursor.fetchall()  # ambil dataset
+    #     countdataset = len(pesawat)  # menghitung jumlah dataset
+    #     valtopxp = []
+    #     for row in valpx:  # perulangan hasil perhitungan px
+    #         for rows in countjenis:  # perulangan ambil jumlah data masing" dataset setiap jenis
+    #             if row[0] == rows[0]:  # jika nama jenis pesawat sama
+    #                 value = float(row[1] * (float(rows[1] / countdataset)))  # dilakukan perhitungan hasil P(X|CI) * P(CI)
+    #                 if value != 0:  # jika hasilnya tidak sama dengan nol, disimpan didalam array
+    #                     valtopxp.append((row[0], value))
+    #     # print(valtopxp)
+    #     if valtopxp:
+    #         datapxp.append(max(valtopxp))  # dicari nilai tertingginya
+    #         # print(datapxp[0][0])
+    #         # print(i[9])
+    #         if datapxp[0][0] == i[9]:
+    #             counttrue+=1
+    #             print(counttrue)
+    # precission = float(counttrue/len(getDataTesting))
+    # print(precission)
+    # # =========================================================================
     a = None
-    datapxp = [] #array untuk menyimpan data P(X|CI) * P(CI)
-    datapesawat = [] #array untuk menyimpan data pesawat yang teridentifikasi
+    datapxp = []  # array untuk menyimpan data P(X|CI) * P(CI)
+    datapesawat = []  # array untuk menyimpan data pesawat yang teridentifikasi
     if request.method == 'POST':
+        namapesawat = request.form['nama_pesawat'] #ambil data dari form
+        jenis_pesawat = request.form['jenis_pesawat'] #ambil data dari form
         jenis_sayap = request.form['jenis_sayap'] #ambil data dari form
         letak_sayap = request.form['letak_sayap'] #ambil data dari form
         arah_sayap = request.form['arah_sayap'] #ambil data dari form
@@ -172,8 +257,17 @@ def index():
         cursor.execute(sql, t)
         datapesawat = cursor.fetchall()
         #mencari data pesawat sesuai fusi informasinya
+
+        if not datapxp:
+            resultmetode="Tidak Ada"
+        else:
+            resultmetode = datapxp[0][0]
+        sql ="INSERT INTO tbl_testing(nama_pesawat, id_jenis_pesawat, id_jenis_sayap, id_jenis_penempatan_sayap, id_arah_sayap, id_jenis_mesin, id_badan_pesawat, id_persenjataan, id_warna, id_posisi_mesin, id_jenis_ekor, result) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)"
+        t = (namapesawat, int(jenis_pesawat), int(jenis_sayap), int(letak_sayap), int(arah_sayap), int(jenis_mesin), int(badan_pesawat), int(persenjataan), int(warna_pesawat), int(posisi_mesin), int(jenis_ekor), resultmetode)
+        cursor.execute(sql, t)
+        conn.commit()
     conn.close()
-    return render_template('index.html', jenis=jenis, letak=letak, arah=arah, badan=badan, persenjataan=persenjataan, mesin=mesin, warna=warna, ekor=ekor, posisi=posisi, data=datapxp, datapesawat=datapesawat, fusi=a)
+    return render_template('index.html', jenis=jenis, letak=letak, arah=arah, badan=badan, persenjataan=persenjataan, mesin=mesin, warna=warna, ekor=ekor, posisi=posisi, data=datapxp, datapesawat=datapesawat, fusi=a, jenispesawat=jenispesawat)
 
 # ================================================
 #route untuk halaman jenis pesawat
@@ -612,7 +706,7 @@ def getProcessData():
     conn = mysql.connect()
     cursor = conn.cursor()
     #ambil data di tbl_process
-    sql = "SELECT tbl_process.id_pesawat, tbl_jenis_pesawat.nama_jenis_pesawat, tbl_process.fusi_informasi, tbl_process.jumlah_fusi, tbl_process.naive_bayes " \
+    sql = "SELECT tbl_process.id_pesawat, tbl_jenis_pesawat.nama_jenis_pesawat, tbl_process.fusi_informasi, tbl_process.jumlah_fusi, tbl_process.naive_bayes, tbl_pesawat.nama_pesawat " \
           "FROM tbl_process INNER JOIN tbl_pesawat ON tbl_pesawat.id=tbl_process.id_pesawat " \
           "INNER JOIN tbl_jenis_pesawat ON tbl_jenis_pesawat.id_jenis_pesawat=tbl_pesawat.id_jenis_pesawat"
     cursor.execute(sql)
@@ -625,7 +719,7 @@ def getProcessData():
     #validasi jika jumlah data pesawat dan jumlah data di tbl_process tidak sama, akah diproses, jika tidak, tidak akan diproses lagi
     if len(tblprocess) != len(tblpesawat):
         #ambil data bit setiap ciri-ciri
-        sql = "SELECT p.id, nama_pesawat, j.nama_jenis_pesawat, a.bit_spesifik as jenis_sayap, b.bit_spesifik as jenis_penempatan_sayap, " \
+        sql = "SELECT p.id, p.nama_pesawat, j.nama_jenis_pesawat, a.bit_spesifik as jenis_sayap, b.bit_spesifik as jenis_penempatan_sayap, " \
               "d.bit_spesifik as arah_sayap, e.bit_spesifik as jenis_mesin, x.bit_spesifik as posisi_mesin, h.bit_spesifik as badan_pesawat, y.bit_spesifik as jenis_ekor, " \
               "m.bit_spesifik as persenjataan, " \
               "n.bit_spesifik as warna, r.name FROM tbl_pesawat as p INNER JOIN tbl_jenis_pesawat as j ON p.id_jenis_pesawat=j.id_jenis_pesawat " \
@@ -648,7 +742,7 @@ def getProcessData():
             a = xor(a, row[9], count)
             a = xor(a, row[10], count)
             a = xor(a, row[11], count)
-            res.append((row[0], row[2], a))
+            res.append((row[0], row[2], a, row[1]))
         listfusi = []
         #membuat list fusi yang berbeda
         for row in res:
@@ -665,10 +759,11 @@ def getProcessData():
             id = row[0]
             jenispesawat = row[1]
             fusi = row[2]
+            namapesawat = row[3]
             for datafusi, val in dictset.items():
                 if fusi == datafusi:
                     countfusi = val
-            dataarray.append((id, jenispesawat, fusi, countfusi))
+            dataarray.append((id, jenispesawat, fusi, countfusi, namapesawat))
         #ambil jumlah data masing" dataset setiap jenis
         sql = "SELECT tbl_jenis_pesawat.nama_jenis_pesawat, COUNT(tbl_pesawat.id_jenis_pesawat) FROM `tbl_pesawat` " \
               "INNER JOIN tbl_jenis_pesawat ON tbl_jenis_pesawat.id_jenis_pesawat=tbl_pesawat.id_jenis_pesawat GROUP BY tbl_pesawat.id_jenis_pesawat"
@@ -679,14 +774,58 @@ def getProcessData():
             for jenis in countjenis:
                 if row[1] == jenis[0]:
                     nb = float(row[3]/jenis[1])
-            arrayres.append({"id_pesawat" : row[0], "nama_pesawat" : row[1], "fusi" : row[2], "jumlah_fusi" : row[3], "naive_bayes" : nb})
+            arrayres.append({"id_pesawat" : row[0], "jenis_pesawat" : row[1], "fusi" : row[2], "jumlah_fusi" : row[3], "naive_bayes" : nb, "nama_pesawat" : row[4]})
             sql = "INSERT INTO tbl_process(id_pesawat, fusi_informasi, jumlah_fusi, naive_bayes) VALUES(%s, %s, %s, %s)"
             t = (row[0], row[2], row[3], nb)
             cursor.execute(sql, t)
             conn.commit()
-    for row in tblprocess:
-        arrayres.append({"id_pesawat": row[0], "nama_pesawat": row[1], "fusi": row[2], "jumlah_fusi": row[3], "naive_bayes": row[4]})
+    if not tblprocess:
+        for row in tblprocess:
+            arrayres.append({"id_pesawat": row[0], "jenis_pesawat": row[1], "fusi": row[2], "jumlah_fusi": row[3], "naive_bayes": row[4], "nama_pesawat": row[5]})
 
     data = {}
     data["data"] = arrayres
+    return jsonify(data)
+
+# ================================================
+#route untuk halaman spesifik pesawat
+@app.route('/testing')
+def testing():
+    conn = mysql.connect()
+    cursor = conn.cursor()
+    sql = "SELECT * FROM tbl_testing" #ambil data karakteristik untuk form select option
+    cursor.execute(sql)
+    testing = cursor.fetchall()
+
+    sql = "SELECT nama_pesawat, nama_jenis_pesawat, result FROM tbl_testing INNER JOIN tbl_jenis_pesawat ON tbl_jenis_pesawat.id_jenis_pesawat=tbl_testing.id_jenis_pesawat"
+    cursor.execute(sql)
+    gettesting = cursor.fetchall()
+    count = 0
+    for row in gettesting:
+        if row[1] == row[2]:
+            count += 1
+    try:
+        precission = float((count / len(testing)) * 100)
+    except ZeroDivisionError:
+        precission = 0
+    conn.close()
+    return render_template('testing.html', testing=testing, precission=precission) #lempar data ke file html
+
+#fungsi untuk ambil data spesifik pesawat
+@app.route('/getTesting')
+def getTesting():
+    conn = mysql.connect()
+    cursor = conn.cursor()
+    #sql untuk mengambil data dari database
+    sql = "SELECT nama_pesawat, tbl_jenis_pesawat.nama_jenis_pesawat, result FROM tbl_testing INNER JOIN tbl_jenis_pesawat ON tbl_jenis_pesawat.id_jenis_pesawat=tbl_testing.id_jenis_pesawat"
+    cursor.execute(sql)
+    result = cursor.fetchall()
+    conn.close()
+
+    res = []
+    for row in result:#dilakukan perulangan untuk dimasukkan kedalam array dan diberi index
+        res.append({"namapesawat" : row[0], "jenispesawatreal" : row[1], "result" : row[2]}) #di input ke variable res
+
+    data = {}
+    data["data"] = res #array res disimpan ke variable data
     return jsonify(data)

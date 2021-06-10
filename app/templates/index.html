@@ -22,6 +22,27 @@
                                     <form action="{{ url_for('index') }}" method="POST" class="">
                                         <div class="col-12 row">
                                             <div class="col-6 form-group">
+                                                <label for="nama_pesawat" class=" form-control-label">Nama Pesawat</label>
+                                            </div>
+                                            <div class="col-6 form-group">
+                                                <input type="text" class="form-control" id="nama_pesawat" name="nama_pesawat">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 row">
+                                            <div class="col-6 form-group">
+                                                <label for="jenis_pesawat" class=" form-control-label">Jenis Pesawat Seharusnya</label>
+                                            </div>
+                                            <div class="col-6 form-group">
+                                                <select name="jenis_pesawat" id="jenis_pesawat" class="form-control">
+                                                    <option value="0" hidden>Please select</option>
+                                                    {% for row in jenispesawat: %}
+                                                    <option value="{{ row.0 }}">{{ row.1 }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 row">
+                                            <div class="col-6 form-group">
                                                 <label for="jenis_sayap" class=" form-control-label">Jenis Sayap</label>
                                             </div>
                                             <div class="col-6 form-group">
@@ -145,7 +166,7 @@
                                     </form>
                                 </div>
                                 <div class="container">
-                                    <p>Hasil : <b>{{ "Teridentifikasi" if data else "Tidak Teridentifikasi" }}</b></p>
+                                    <p>Hasil : <b>{{ "Teridentifikasi" if data else "Objek tidak dikenal atau belum ada di dalam basis data" }}</b></p>
                                     <p>Fusi Informasi : <b>{{ fusi if fusi else "-" }}</b></p>
                                     <p>Jenis : <b>{%if data%}{% for row in data %} {{row.0}} {% endfor %}{% else %}{{ '-' }}{% endif %}</b></p>
                                     <p>Value : <b>{%if data%}{% for row in data %} {{row.1}} {% endfor %}{% else %}{{ '-' }}{% endif %}</b></p>
