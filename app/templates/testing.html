@@ -12,43 +12,167 @@
             <div class="row">
                 <div class="col-lg-12">
                     <div class="au-card recent-report">
-                        <div class="col-lg-12 row">
-                            <div class="col-lg-4">
-                                <div class="card border border-primary">
-                                    <div class="card-header">
-                                        <center><strong class="card-title">Accuracy</strong></center>
-                                    </div>
-                                    <div class="card-body">
-                                        <center><strong class="card-title">{{precission}}%</strong></center>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="card border border-primary">
-                                    <div class="card-header">
-                                        <center><strong class="card-title">Precission</strong></center>
-                                    </div>
-                                    <div class="card-body">
-                                        <center><strong class="card-title">{{precission}}%</strong></center>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4">
-                                <div class="card border border-primary">
-                                    <div class="card-header">
-                                        <center><strong class="card-title">Recall</strong></center>
-                                    </div>
-                                    <div class="card-body">
-                                        <center><strong class="card-title">{{precission}}%</strong></center>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
                         <div class="au-card-inner">
-                            <div class="table-responsive">
-                                <table id="tbl_testing" class="table table-borderless table-striped table-earning">
+                            <div class="card">
+                                <div class="card-header">
+                                    <center><strong>Testing Data</strong></center>
+                                </div>
+                                <div class="card-body card-block">
+                                    <form action="{{ url_for('testing') }}" method="POST" class="">
+                                        <!-- kolom nama pesawat & jenis pesawat -->
+                                        <div class="col-12 row">
+                                            <div class="col-6 form-group">
+                                                <label for="nama_pesawat" class=" form-control-label">Nama Pesawat</label>
+                                            </div>
+                                            <div class="col-6 form-group">
+                                                <input type="text" class="form-control" id="nama_pesawat" name="nama_pesawat">
+                                            </div>
+                                        </div>
+                                        <div class="col-12 row">
+                                            <div class="col-6 form-group">
+                                                <label for="jenis_pesawat" class=" form-control-label">Jenis Pesawat Seharusnya</label>
+                                            </div>
+                                            <div class="col-6 form-group">
+                                                <select name="jenis_pesawat" id="jenis_pesawat" class="form-control">
+                                                    <option value="0" hidden>Please select</option>
+                                                    {% for row in jenispesawat: %}
+                                                    <option value="{{ row.0 }}">{{ row.1 }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
 
-                                </table>
+                                        <div class="col-12 row">
+                                            <div class="col-6 form-group">
+                                                <label for="jenis_sayap" class=" form-control-label">Jenis Sayap</label>
+                                            </div>
+                                            <div class="col-6 form-group">
+                                                <select name="jenis_sayap" id="jenis_sayap" class="form-control">
+                                                    <option value="0" hidden>Please select</option>
+                                                    {% for row in jenis: %}
+                                                    <option value="{{ row.0 }}">{{ row.1 }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 row">
+                                            <div class="col-6 form-group">
+                                                <label for="letak_sayap" class=" form-control-label">Penempatan Sayap</label>
+                                            </div>
+                                            <div class="col-6 form-group">
+                                                <select name="letak_sayap" id="letak_sayap" class="form-control">
+                                                    <option value="0" hidden>Please select</option>
+                                                    {% for row in letak: %}
+                                                    <option value="{{ row.0 }}">{{ row.1 }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 row">
+                                            <div class="col-6 form-group">
+                                                <label for="arah_sayap" class=" form-control-label">Arah Sayap</label>
+                                            </div>
+                                            <div class="col-6 form-group">
+                                                <select name="arah_sayap" id="arah_sayap" class="form-control">
+                                                    <option value="0" hidden>Please select</option>
+                                                    {% for row in arah: %}
+                                                    <option value="{{ row.0 }}">{{ row.1 }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 row">
+                                            <div class="col-6 form-group">
+                                                <label for="jenis_mesin" class=" form-control-label">Jenis Mesin</label>
+                                            </div>
+                                            <div class="col-6 form-group">
+                                                <select name="jenis_mesin" id="jenis_mesin" class="form-control">
+                                                    <option value="0" hidden>Please select</option>
+                                                    {% for row in mesin: %}
+                                                    <option value="{{ row.0 }}">{{ row.1 }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 row">
+                                            <div class="col-6 form-group">
+                                                <label for="posisi_mesin" class=" form-control-label">Posisi Mesin</label>
+                                            </div>
+                                            <div class="col-6 form-group">
+                                                <select name="posisi_mesin" id="posisi_mesin" class="form-control">
+                                                    <option value="0" hidden>Please select</option>
+                                                    {% for row in posisi: %}
+                                                    <option value="{{ row.0 }}">{{ row.1 }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 row">
+                                            <div class="col-6 form-group">
+                                                <label for="badan_pesawat" class=" form-control-label">Badan Pesawat</label>
+                                            </div>
+                                            <div class="col-6 form-group">
+                                                <select name="badan_pesawat" id="badan_pesawat" class="form-control">
+                                                    <option value="0" hidden>Please select</option>
+                                                    {% for row in badan: %}
+                                                    <option value="{{ row.0 }}">{{ row.1 }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 row">
+                                            <div class="col-6 form-group">
+                                                <label for="persenjataan" class=" form-control-label">Persenjataaan</label>
+                                            </div>
+                                            <div class="col-6 form-group">
+                                                <select name="persenjataan" id="persenjataan" class="form-control">
+                                                    <option value="0" hidden>Please select</option>
+                                                    {% for row in persenjataan: %}
+                                                    <option value="{{ row.0 }}">{{ row.1 }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 row">
+                                            <div class="col-6 form-group">
+                                                <label for="warna_pesawat" class=" form-control-label">Warna Pesawat</label>
+                                            </div>
+                                            <div class="col-6 form-group">
+                                                <select name="warna_pesawat" id="warna_pesawat" class="form-control">
+                                                    <option value="0" hidden>Please select</option>
+                                                    {% for row in warna: %}
+                                                    <option value="{{ row.0 }}">{{ row.1 }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="col-12 row">
+                                            <div class="col-6 form-group">
+                                                <label for="jenis_ekor" class=" form-control-label">Jenis Ekor</label>
+                                            </div>
+                                            <div class="col-6 form-group">
+                                                <select name="jenis_ekor" id="jenis_ekor" class="form-control">
+                                                    <option value="0" hidden>Please select</option>
+                                                    {% for row in ekor: %}
+                                                    <option value="{{ row.0 }}">{{ row.1 }}</option>
+                                                    {% endfor %}
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div class="card-footer">
+                                            <button type="submit" class="btn btn-primary btn-sm">
+                                                <i class="fa fa-dot-circle-o"></i> Testing
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="container">
+                                    <p>Hasil : <b>{{ "Teridentifikasi" if data else "Objek tidak dikenal atau belum ada di dalam basis data" }}</b></p>
+                                    <p>Fusi Informasi : <b>{{ fusi if fusi else "-" }}</b></p>
+                                    <p>Jenis : <b>{%if data%}{% for row in data %} {{row.0}} {% endfor %}{% else %}{{ '-' }}{% endif %}</b></p>
+                                    <p>Value : <b>{%if data%}{% for row in data %} {{row.1}} {% endfor %}{% else %}{{ '-' }}{% endif %}</b></p>
+                                    <p>Nama Pesawat/Helikopter : {%if data%}{% for row in datapesawat%} <b>{{ row.0 }}</b>, {% endfor %}{% else %}{{ '-' }}{% endif %}</p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -57,8 +181,7 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="copyright">
-                        <p>Copyright © 2018 Colorlib. All rights reserved. Template by <a href="https://colorlib.com">Colorlib</a>.
-                        </p>
+                        <p>Copyright © 2018 Colorlib. All rights reserved. Template by <a href="https://colorlib.com">Colorlib</a>.</p>
                     </div>
                 </div>
             </div>
@@ -66,36 +189,6 @@
     </div>
 </div>
 <!-- END MAIN CONTENT-->
-<script>
-    $(document).ready(function(){
-        getData();
-        function getData(){
-            $('#tbl_testing').DataTable({
-            ajax : {
-                'url' : "{{ url_for('getTesting') }}", //memanggil fungsi gettesting
-            },
-            //mengatur kolom untuk table
-            'columns': [
-                    {
-                        'title' : "Nama Pesawat",
-                        'data' : "namapesawat"
-                    },
-                    {
-                        'title' : "Jenis Pesawat Asli",
-                        'data' : "jenispesawatreal"
-                    },
-                    {
-                        'title' : "Hasil",
-                        'data' : "result"
-                    },
-                ]
-            });
-        }
-    });
-
-
-
-</script>
 <!-- END PAGE CONTAINER-->
 </div>
 {% endblock %}

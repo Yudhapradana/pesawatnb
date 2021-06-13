@@ -64,7 +64,7 @@
                 <ul class="list-unstyled navbar__list">
                     <li>
                         <a href="{{ url_for('index') }}">
-                            <i class="fas fa-chart-bar"></i>Testing</a>
+                            <i class="fas fa-chart-bar"></i>Identifikasi</a>
                     </li>
                     <li class="has-sub">
                         <a class="js-arrow" href="#">
@@ -89,9 +89,21 @@
                         <a href="{{ url_for('processData') }}">
                             <i class="fas fa-table"></i>Training</a>
                     </li>
-                    <li>
-                        <a href="{{ url_for('testing') }}">
-                            <i class="fas fa-table"></i>Testing</a>
+                    
+
+                    <li class="has-sub">
+                        <a class="js-arrow" href="#">
+                            <i class="fas fa-tachometer-alt"></i>Testing Data</a>
+                        <ul class="list-unstyled navbar__sub-list js-sub-list">
+                            <li>
+                                <a href="{{ url_for('testing') }}">
+                                    <i class="fas fa-table"></i>Testing</a>
+                            </li>
+                            <li>
+                                <a href="{{ url_for('confusionmatrix') }}">
+                                    <i class="fas fa-table"></i>Confusion Matrix</a>
+                            </li>
+                        </ul>
                     </li>
                     <!--                        <li>-->
                     <!--                            <a href="form.html">-->
